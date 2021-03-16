@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0,user-scalable=0"/>
+    <title>{{if .title}}{{.title}} | {{end}}{{SiteTitle}}</title>
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>{{SiteFavicon}}</text></svg>">
+    <link rel="stylesheet" href="/assets/css/style.css">
+    <link rel="alternate" href="/rss.xml" type="application/rss+xml" title="{{SiteTitle}}">
+    <meta name="author" content="{{SiteAuthor}}">
+    <meta name="description" content="{{if .metadescription}}{{.metadescription}}{{else}}{{SiteDescription}}{{end}}">
+    {{if .canonical}}<link rel="canonical" href="{{.canonical}}" />{{end}}
+    <!--[if IE]>
+    <script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+</head>
+
+<body>
+    <header>
+        <a class="title" href="/">
+            <h2>{{SiteSubtitle}}</h2>
+        </a>
+        <nav>
+            <a href="/">Home</a>
+            {{if Authenticated}}<a href="/dashboard">Dashboard</a>{{end}}
+            {{range $p := PublishedPages}}
+            <a href="/{{.URL}}">{{.Title}}</a>
+            {{end}}
+            <a href="/blog">Blog</a>
+        </nav>
+    </header>
+
+    <main>
+        {{if .title}}
+        <h1>{{.title}}</h1>
+        {{end}}
+        {{if .pubdate}}
+        <p>
+            <i>
+                <time datetime="{{.pubdate | Stamp}}" pubdate>
+                    {{.pubdate | StampFriendly}}
+                </time>
+                {{if Authenticated}}<a href="/dashboard/posts/{{.id}}">edit</a>{{end}}
+            </i>
+            
+        </p>
+        {{end}}
+        <content>
+            {{if .query}}
+            <h3 style="margin-bottom:0">Filtering for "{{.query}}"</h3>
+            <small>
+                <a href="/blog">Remove filter</a>
+            </small>
+            {{end}}
+            {{template "content" .}}
+        </content>
+        {{if .tags}}
+        <small>
+            <div>
+                {{range $p := .tags}}
+                <a href="/blog?q={{.Name}}">#{{.Name}}</a>
+                {{end}}
+            </div>
+        </small>
+        {{end}}
+
+        {{if and .pubdate DisqusID}}
+        <div id="disqus_thread"></div>
+        {{end}}
+    </main>
+    <footer>
+        {{SiteFooter}}
+    </footer>
+
+    {{if GoogleAnalyticsID}}
+    <script async src="https://www.googletagmanager.com/gtag/js?id={{GoogleAnalyticsID}}"></script>
+    <script type="text/javascript">
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', '{{GoogleAnalyticsID}}');
+    </script>
+    {{end}}
+    {{if and .pubdate DisqusID}}
+    <script type="text/javascript">
+        var disqus_config = function () {
+            this.page.url = '{{SiteURL}}/{{.posturl}}';
+            this.page.identifier = '{{.id}}';
+        };
+        (function() {
+        var d = document, s = d.createElement('script');
+        s.src = 'https://{{DisqusID}}.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+        })();
+    </script>
+    {{end}}
+</body>
+
+</html>

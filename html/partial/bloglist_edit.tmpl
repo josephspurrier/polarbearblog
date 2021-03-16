@@ -1,0 +1,20 @@
+{{define "content"}}
+<a href="/dashboard/posts/new">New post</a>
+<ul class="post-list">
+    {{range $id, $p := .posts}}
+    <li>
+        <span>
+            <i>
+                <time datetime="{{.Timestamp | Stamp}}" pubdate>
+                    {{.Timestamp | Stamp}}
+                </time>
+            </i>
+        </span>
+        <a href="/dashboard/posts/{{.ID}}">{{if .Page}}[Page] {{end}}{{.Title}}</a>
+        {{if not .Published}}
+        <small>(not published)</small>
+        {{end}}
+    </li>
+    {{end}}
+</ul>
+{{end}}

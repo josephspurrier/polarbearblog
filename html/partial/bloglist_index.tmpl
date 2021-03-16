@@ -1,0 +1,26 @@
+{{define "content"}}
+<ul class="blog-posts">
+    {{if .posts }}
+        {{range $p := .posts}}
+        <li>
+            <span>
+                <i>
+                    <time datetime="{{.Timestamp | Stamp}}" pubdate>
+                        {{.Timestamp | StampFriendly}}
+                    </time>
+                </i>
+            </span>
+            <a href="/{{.URL}}">{{.Title}}</a>
+        </li>
+	    {{end}}
+    {{else}}
+    <li>
+        <span>
+            <i>
+                No posts yet.
+            </i>
+        </span>
+    </li>
+    {{end}}
+</ul>
+{{end}}

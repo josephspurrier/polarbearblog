@@ -1,0 +1,73 @@
+{{define "content"}}
+<form method="POST" class="post-form">
+    <input type="hidden" name="token" value="{{.token}}">
+    <p>
+        <label for="id_title">Site title:</label>
+        <input type="text" name="title" value="{{.ptitle}}" maxlength="200" id="id_title" required>
+    </p>
+    <p>
+        <label for="id_subtitle">Site subtitle:</label>
+        <input type="text" name="subtitle" value="{{.subtitle}}" maxlength="200" id="id_subtitle" required>
+    </p>
+    <p>
+        <label for="id_author">Site author:</label>
+        <input type="text" name="author" value="{{.pauthor}}" id="id_author" required>
+    </p>
+    <p>
+        <label for="id_domain">Site url:</label>
+        <select name="scheme" id="id_scheme" required>
+            <option value="http" {{ if eq .scheme "http" }}selected{{ end }}>http</option>
+            <option value="https" {{ if eq .scheme "https" }}selected{{ end }}>https</option>
+        </select>
+        <span class="helptext">://</span>
+        <input type="text" name="domain" value="{{.domain}}" id="id_domain" required>
+        <span class="helptext">(ex. www.example.com)</span>
+    </p>
+    <p>
+        <label for="id_favicon">Site favicon:</label>
+        <input type="text" name="favicon" value="{{.favicon}}" maxlength="4" id="id_favicon" required>
+        <span class="helptext"><a href='https://emojicheatsheet.com/' target='_blank'>Emoji cheatsheet</a>
+        </span>
+    </p>
+    <p>
+        <label for="id_loginurl">Site login url:</label>
+        <span class="helptext">/login/</span>
+        <input type="text" name="loginurl" value="{{.loginurl}}" id="id_loginurl" required>
+    </p>
+    <p>
+        <label for="id_googleanalytics">Google analytics id:</label>
+        <input type="text" name="googleanalytics" value="{{.googleanalytics}}" id="id_googleanalytics">
+        <span class="helptext">Optional if you want analytics through Google.</span>
+    </p>
+    <p>
+        <label for="id_disqus">Disqus id:</label>
+        <input type="text" name="disqus" value="{{.disqus}}" id="id_disqus">
+        <span class="helptext">Optional if you want comments through Disqus.</span>
+    </p>
+    <p>
+        <label for="id_description">Site description:</label>
+        <textarea name="pdescription" cols="40" rows="3" id="id_description">{{.pdescription}}</textarea>
+    </p>
+    <p>
+        <label for="id_footer">Site footer:</label>
+        <textarea name="footer" cols="40" rows="3" id="id_footer">{{.footer}}</textarea>
+    </p>
+    <p>
+        <label for="id_content">Homepage content (markdown):</label>
+        <textarea name="content" cols="40" rows="20" id="id_content">{{.homeContent}}</textarea>
+        <span class="helptext">
+            <a href='https://simplemde.com/markdown-guide' target='_blank'>Markdown cheatsheet</a>
+        </span>
+        |
+        <span class="helptext">
+            <a href='https://emojicheatsheet.com/' target='_blank'>Emoji cheatsheet</a>
+        </span>
+    </p>
+    <button type="submit" class="save btn btn-default">Save</button>
+</form>
+<p>
+    <div>Sitemap: <a href="/sitemap.xml" target="_blank">/sitemap.xml</a></div>
+    <div>RSS Feed: <a href="/rss.xml" target="_blank">/rss.xml</a></div>
+    <div>Maintenance: <a href="/dashboard/reload">Reload from storage</a></div>
+</p>
+{{end}}

@@ -1,0 +1,19 @@
+{{define "content"}}
+<form class="login" method="POST">
+    <input type="hidden" name="token" value="{{.token}}">
+    <p>
+        <label for="id_email">E-mail:</label>
+        <input type="email" name="email" placeholder="E-mail address" autofocus="autofocus" required id="id_email">
+    </p>
+    <p>
+        <label for="id_password">Password:</label> <input type="password" name="password" placeholder="Password" required id="id_password">
+    </p>
+    <p>
+        <label for="id_mfa">MFA:</label> <input type="number" name="mfa" placeholder="MFA Token" required id="id_mfa">
+    </p>
+    <p>
+        <label for="id_remember">Remember me:</label> <input type="checkbox" name="remember" id="id_remember">
+    </p>
+    <button class="primaryAction" type="submit">Sign In</button>
+</form>
+{{end}}
