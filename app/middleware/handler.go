@@ -18,10 +18,11 @@ type Handler struct {
 // NewHandler -
 func NewHandler(te *htmltemplate.Engine, sess *websession.Session, mux *router.Mux, siteURL string, siteScheme string) *Handler {
 	return &Handler{
-		Render:  te,
-		Router:  mux,
-		Sess:    sess,
-		SiteURL: siteURL,
+		Render:     te,
+		Router:     mux,
+		Sess:       sess,
+		SiteURL:    siteURL,
+		SiteScheme: siteScheme,
 	}
 
 }
