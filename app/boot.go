@@ -94,9 +94,9 @@ func Boot() {
 	mw = h.Redirect(mw)
 	mw = h.Head(mw)
 	mw = h.DisallowAnon(mw)
+	mw = sessionManager.LoadAndSave(mw)
 	mw = middleware.Gzip(mw)
 	mw = h.LogRequest(mw)
-	mw = sessionManager.LoadAndSave(mw)
 
 	// Start the web server.
 	port := os.Getenv("PORT")
