@@ -1,9 +1,7 @@
 package app
 
 import (
-	"encoding/base64"
 	"fmt"
-	"io/ioutil"
 	"log"
 	"net/http"
 	"os"
@@ -22,7 +20,7 @@ import (
 
 const (
 	storageSitePath    = "storage/site.json"
-	storageSessionPath = "storage/session.json"
+	storageSessionPath = "storage/session.bin"
 	sessionName        = "session"
 )
 
@@ -42,22 +40,6 @@ func Boot() {
 	allowHTML, err := strconv.ParseBool(os.Getenv("SS_ALLOW_HTML"))
 	if err != nil {
 		log.Fatalln("Environment variable not able to parse as bool:", "SS_ALLOW_HTML")
-	}
-
-	// Create the local files if in development mode.
-	if envdetect.RunningLocalDev() {
-		if _, err := os.Stat(storageSitePath); os.IsNotExist(err) {
-			ioutil.WriteFile(storageSitePath, []byte("{}"), 0644)
-		}
-		if _, err := os.Stat(storageSessionPath); os.IsNotExist(err) {
-			ioutil.WriteFile(storageSessionPath, []byte("{}"), 0644)
-		}
-	}
-
-	// Decode the key for encrypting sesstions.
-	decodedSecretKey, err := base64.StdEncoding.DecodeString(secretKey)
-	if err != nil {
-		log.Fatalln(err)
 	}
 
 	// Create new store object with the defaults.
@@ -83,7 +65,8 @@ func Boot() {
 	}
 
 	// Set up the session storage provider.
-	store, err := websession.NewJSONSession(ss, decodedSecretKey)
+	en := websession.NewEncryptedStorage(secretKey)
+	store, err := websession.NewJSONSession(ss, en)
 	if err != nil {
 		log.Fatalln(err)
 	}

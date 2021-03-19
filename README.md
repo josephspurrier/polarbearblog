@@ -120,20 +120,20 @@ When `SS_LOCAL` is set, the following things will happen:
 
 ### Home Page
 
-![Home](testdata/images/home.png)
+![Home](doc/images/home.png)
 
 ### Dashboard
 
-![Dashboard](testdata/images/dashboard.png)
+![Dashboard](doc/images/dashboard.png)
 
 ### Custom Styles
 
-![Styles](testdata/images/styles.png)
+![Styles](doc/images/styles.png)
 
 ### Edit a Post
 
-![Edit a Post](testdata/images/post-edit.png)
+![Edit a Post](doc/images/post-edit.png)
 
 ### View a Post
 
-![View a Post](testdata/images/post.png)
+![View a Post](doc/images/post.png)

@@ -20,8 +20,13 @@ type SessionData struct {
 }
 
 // Load -
-func (sd *SessionDatabase) Load(ss Sessionstorer) error {
+func (sd *SessionDatabase) Load(ss Sessionstorer, en Encrypter) error {
 	b, err := ss.Load()
+	if err != nil {
+		return err
+	}
+
+	b, err = en.Decrypt(b)
 	if err != nil {
 		return err
 	}
@@ -39,7 +44,7 @@ func (sd *SessionDatabase) Load(ss Sessionstorer) error {
 }
 
 // Save -
-func (sd *SessionDatabase) Save(ss Sessionstorer) error {
+func (sd *SessionDatabase) Save(ss Sessionstorer, en Encrypter) error {
 	var b []byte
 	var err error
 
@@ -50,6 +55,11 @@ func (sd *SessionDatabase) Save(ss Sessionstorer) error {
 		b, err = json.Marshal(sd)
 	}
 
+	if err != nil {
+		return err
+	}
+
+	b, err = en.Encrypt(b)
 	if err != nil {
 		return err
 	}

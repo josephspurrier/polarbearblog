@@ -1,11 +1,11 @@
 package main
 
 import (
-	"encoding/base64"
+	"crypto/rand"
+	"encoding/hex"
 	"fmt"
 	"log"
 
-	"github.com/gorilla/securecookie"
 	"github.com/josephspurrier/polarbearblog/app/lib/timezone"
 )
 
@@ -17,8 +17,13 @@ func init() {
 }
 
 func main() {
-	// Generate a new private key.
-	key := securecookie.GenerateRandomKey(32)
-	sss := base64.StdEncoding.EncodeToString(key)
-	fmt.Printf("SS_SESSION_KEY=%v\n", sss)
+	// Generate a new private key for AES-256.
+	bytes := make([]byte, 32)
+	if _, err := rand.Read(bytes); err != nil {
+		panic(err.Error())
+	}
+
+	// Encode key in bytes to string for saving.
+	key := hex.EncodeToString(bytes)
+	fmt.Printf("SS_SESSION_KEY=%v\n", key)
 }

@@ -1,8 +1,13 @@
 # This Makefile is an easy way to run common operations.
 # Execute commands like this:
 # * make
+# * make gcp-init
+# * make gcp-push
 # * make privatekey
 # * make mfa
+# * make passhash passwordhere
+# * make local-init
+# * make local-run
 
 # Load the environment variables.
 include .env
@@ -66,8 +71,8 @@ passhash:
 .PHONY: local-init
 local-init:
 	@echo Creating session and site storage files locally.
-	cp testdata/empty.json storage/session.json
-	cp testdata/empty.json storage/site.json
+	cp storage/initial/session.bin storage/session.bin
+	cp storage/initial/session.json storage/site.json
 
 .PHONY: local-run
 local-run:

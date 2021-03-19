@@ -6,7 +6,6 @@ require (
 	cloud.google.com/go/storage v1.14.0
 	github.com/alexedwards/scs/v2 v2.4.0
 	github.com/dgryski/dgoogauth v0.0.0-20190221195224-5a805980a5f3
-	github.com/gorilla/securecookie v1.1.1
 	github.com/matryer/way v0.0.0-20180416093233-9632d0c407b0
 	github.com/mdp/qrterminal/v3 v3.0.0
 	github.com/microcosm-cc/bluemonday v1.0.4
