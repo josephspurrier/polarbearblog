@@ -22,7 +22,7 @@ SS_ALLOW_HTML=false
 ## GCP bucket name (this can be one that doesn't exist yet).
 GCP_BUCKET_NAME=sample-bucket
 ## Optional: enable MFA (TOTP) that works with apps like Google Authenticator. Generate with: make mfa
-## SS_MFA_KEY=
+# SS_MFA_KEY=
 ## Optional: set the timezone from here:
 ## https://golang.org/src/time/zoneinfo_abbrs_windows.go
 # SS_TIMEZONE=America/New_York

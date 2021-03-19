@@ -12,19 +12,19 @@ import (
 )
 
 // New returns a HTML template engine.
-func New(ds *datastorage.Storage, sess *websession.Session, sanitize bool) *Engine {
+func New(ds *datastorage.Storage, sess *websession.Session, allowUnsafeHTML bool) *Engine {
 	return &Engine{
-		storage:  ds,
-		sess:     sess,
-		sanitize: sanitize,
+		storage:         ds,
+		sess:            sess,
+		allowUnsafeHTML: allowUnsafeHTML,
 	}
 }
 
 // Engine represents a HTML template engine.
 type Engine struct {
-	storage  *datastorage.Storage
-	sess     *websession.Session
-	sanitize bool
+	storage         *datastorage.Storage
+	sess            *websession.Session
+	allowUnsafeHTML bool
 }
 
 // Template renders HTML to a response writer and returns a 200 status code and

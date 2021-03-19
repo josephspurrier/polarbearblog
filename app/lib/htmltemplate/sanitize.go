@@ -17,7 +17,7 @@ func (te *Engine) sanitizedContent(t *template.Template, content string) (*templ
 	htmlCode := blackfriday.Run([]byte(markdownWithUnixLineEndings))
 
 	// Sanitize by removing HTML if true.
-	if te.sanitize {
+	if !te.allowUnsafeHTML {
 		htmlCode = bluemonday.UGCPolicy().SanitizeBytes(htmlCode)
 	}
 

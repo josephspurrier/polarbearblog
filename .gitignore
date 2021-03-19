@@ -17,5 +17,4 @@
 .DS_Store
 /tmp
 /bin
-.envrc
-.env
+.env*

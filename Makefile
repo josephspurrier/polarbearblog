@@ -35,7 +35,8 @@ gcp-push:
 		--update-env-vars SS_PASSWORD_HASH=${SS_PASSWORD_HASH} \
 		--update-env-vars SS_MFA_KEY="${SS_MFA_KEY}" \
 		--update-env-vars GCP_PROJECT_ID=${GCP_PROJECT_ID} \
-		--update-env-vars GCP_BUCKET_NAME=${GCP_BUCKET_NAME}
+		--update-env-vars GCP_BUCKET_NAME=${GCP_BUCKET_NAME} \
+		--update-env-vars SS_ALLOW_HTML=${SS_ALLOW_HTML}
 
 .PHONY: privatekey
 privatekey:
