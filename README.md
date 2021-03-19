@@ -115,3 +115,25 @@ When `SS_LOCAL` is set, the following things will happen:
 - MFA, if enable will accept any number and will always pass validation
 - Google Analytics will be disabled if set
 - Disqus will be disabled if set
+
+## Screenshots
+
+### Home Page
+
+![Home](testdata/images/home.png)
+
+### Dashboard
+
+![Dashboard](testdata/images/dashboard.png)
+
+### Custom Styles
+
+![Styles](testdata/images/styles.png)
+
+### Edit a Post
+
+![Edit a Post](testdata/images/post-edit.png)
+
+### View a Post
+
+![View a Post](testdata/images/post.png)
