@@ -72,7 +72,7 @@ passhash:
 local-init:
 	@echo Creating session and site storage files locally.
 	cp storage/initial/session.bin storage/session.bin
-	cp storage/initial/session.json storage/site.json
+	cp storage/initial/site.json storage/site.json
 
 .PHONY: local-run
 local-run:
