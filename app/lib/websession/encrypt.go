@@ -54,9 +54,11 @@ func (en *EncryptedStorage) Encrypt(data []byte) ([]byte, error) {
 
 // Decrypt -
 func (en *EncryptedStorage) Decrypt(enc []byte) ([]byte, error) {
+	// Don't decrypt if there is no content.
 	if len(enc) == 0 {
 		return []byte("{}"), nil
 	}
+
 	// Convert key to byte array.
 	key, err := hex.DecodeString(en.privatekey)
 	if err != nil {
