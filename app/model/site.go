@@ -22,6 +22,8 @@ type Site struct {
 	Created           time.Time       `json:"created"`
 	Updated           time.Time       `json:"updated"`
 	Content           string          `json:"content"` // Home content.
+	Styles            string          `json:"styles"`
+	StylesAppend      bool            `json:"stylesappend"`
 	Posts             map[string]Post `json:"posts"`
 }
 

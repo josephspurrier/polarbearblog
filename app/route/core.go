@@ -33,6 +33,7 @@ func Register(storage *datastorage.Storage, sess *websession.Session, tmpl *html
 
 	// Register routes.
 	registerHomePost(&HomePost{c})
+	registerStyles(&Styles{c})
 	registerAuthUtil(&AuthUtil{c})
 	registerXMLUtil(&XMLUtil{c})
 	registerAdminPost(&AdminPost{c})

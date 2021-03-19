@@ -3,7 +3,6 @@ package datastorage
 import (
 	"bytes"
 	"context"
-	"fmt"
 	"io"
 	"io/ioutil"
 	"time"
@@ -11,89 +10,70 @@ import (
 	"cloud.google.com/go/storage"
 )
 
-// GCPStorage -
+// GCPStorage represents a Google Storage object.
 type GCPStorage struct {
-	path      string
-	projectID string
-	bucket    string
+	bucket string
+	object string
 }
 
-// NewGCPStorage -
-func NewGCPStorage(storagePath string, projectID string, bucket string) *GCPStorage {
+// NewGCPStorage returns a Google storage item given a bucket and an object
+// path.
+func NewGCPStorage(bucket string, object string) *GCPStorage {
 	return &GCPStorage{
-		path:      storagePath,
-		projectID: projectID,
-		bucket:    bucket,
+		bucket: bucket,
+		object: object,
 	}
 }
 
-// Load -
+// Load downloads an object from a bucket and returns an error if it cannot
+// be read.
 func (s *GCPStorage) Load() ([]byte, error) {
-	b, err := downloadFile(s.bucket, s.path)
-	if err != nil {
-		return nil, err
-	}
-
-	return b, nil
-}
-
-// Save -
-func (s *GCPStorage) Save(b []byte) error {
-	err := uploadFile(s.bucket, s.path, b)
-	if err != nil {
-		return err
-	}
-
-	return nil
-}
-
-// downloadFile downloads an object.
-func downloadFile(bucket, object string) ([]byte, error) {
 	ctx := context.Background()
 	client, err := storage.NewClient(ctx)
 	if err != nil {
-		return nil, fmt.Errorf("storage.NewClient: %v", err)
+		return nil, err
 	}
 	defer client.Close()
 
 	ctx, cancel := context.WithTimeout(ctx, time.Second*50)
 	defer cancel()
 
-	rc, err := client.Bucket(bucket).Object(object).NewReader(ctx)
+	rc, err := client.Bucket(s.bucket).Object(s.object).NewReader(ctx)
 	if err != nil {
-		return nil, fmt.Errorf("Object(%q).NewReader: %v", object, err)
+		return nil, err
 	}
 	defer rc.Close()
 
 	data, err := ioutil.ReadAll(rc)
 	if err != nil {
-		return nil, fmt.Errorf("ioutil.ReadAll: %v", err)
+		return nil, err
 	}
 
 	return data, nil
 }
 
-// uploadFile uploads an object.
-func uploadFile(bucket, object string, data []byte) error {
+// Save uploads an object to a bucket and returns an error if it cannot be
+// written.
+func (s *GCPStorage) Save(b []byte) error {
 	ctx := context.Background()
 	client, err := storage.NewClient(ctx)
 	if err != nil {
-		return fmt.Errorf("storage.NewClient: %v", err)
+		return err
 	}
 	defer client.Close()
 
-	f := bytes.NewReader(data)
+	f := bytes.NewReader(b)
 
 	ctx, cancel := context.WithTimeout(ctx, time.Second*50)
 	defer cancel()
 
 	// Upload an object with storage.Writer.
-	wc := client.Bucket(bucket).Object(object).NewWriter(ctx)
+	wc := client.Bucket(s.bucket).Object(s.object).NewWriter(ctx)
 	if _, err = io.Copy(wc, f); err != nil {
-		return fmt.Errorf("io.Copy: %v", err)
+		return err
 	}
 	if err := wc.Close(); err != nil {
-		return fmt.Errorf("Writer.Close: %v", err)
+		return err
 	}
 
 	return nil

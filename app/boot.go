@@ -7,6 +7,7 @@ import (
 	"log"
 	"net/http"
 	"os"
+	"strconv"
 	"time"
 
 	"github.com/alexedwards/scs/v2"
@@ -33,14 +34,14 @@ func Boot() {
 		log.Fatalln("Environment variable missing:", "SS_SESSION_KEY")
 	}
 
-	projectID := os.Getenv("GCP_PROJECT_ID")
-	if len(projectID) == 0 {
-		log.Fatalln("Environment variable missing:", "GCP_PROJECT_ID")
-	}
-
 	bucket := os.Getenv("GCP_BUCKET_NAME")
 	if len(bucket) == 0 {
 		log.Fatalln("Environment variable missing:", "GCP_BUCKET_NAME")
+	}
+
+	allowHTML, err := strconv.ParseBool(os.Getenv("SS_ALLOW_HTML"))
+	if err != nil {
+		log.Fatalln("Environment variable not able to parse as bool:", "SS_ALLOW_HTML")
 	}
 
 	// Create the local files if in development mode.
@@ -67,8 +68,8 @@ func Boot() {
 
 	if !envdetect.RunningLocalDev() {
 		// Use Google when running in GCP.
-		ds = datastorage.NewGCPStorage(storageSitePath, projectID, bucket)
-		ss = datastorage.NewGCPStorage(storageSessionPath, projectID, bucket)
+		ds = datastorage.NewGCPStorage(bucket, storageSitePath)
+		ss = datastorage.NewGCPStorage(bucket, storageSessionPath)
 	} else {
 		// Use local filesytem when developing.
 		ds = datastorage.NewLocalStorage(storageSitePath)
@@ -95,7 +96,7 @@ func Boot() {
 	sess := websession.New(sessionName, sessionManager)
 
 	// Set up the template engine.
-	tmpl := htmltemplate.New(storage, sess)
+	tmpl := htmltemplate.New(storage, sess, allowHTML)
 
 	// Setup the routes.
 	c, err := route.Register(storage, sess, tmpl)

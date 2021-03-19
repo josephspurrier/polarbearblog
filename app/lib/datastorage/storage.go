@@ -7,19 +7,20 @@ import (
 	"github.com/josephspurrier/polarbearblog/app/model"
 )
 
-// Datastorer -
+// Datastorer reads and writes data to an object.
 type Datastorer interface {
 	Save([]byte) error
 	Load() ([]byte, error)
 }
 
-// Storage -
+// Storage represents a writable and readable object.
 type Storage struct {
 	Site       *model.Site
 	datastorer Datastorer
 }
 
-// New is a way to interact with the site storage.
+// New returns a writable and readable site object. Returns an error if the
+// object cannot be initially read.
 func New(ds Datastorer, site *model.Site) (*Storage, error) {
 	s := &Storage{
 		Site:       site,
@@ -31,6 +32,7 @@ func New(ds Datastorer, site *model.Site) (*Storage, error) {
 		return nil, err
 	}
 
+	// Set the defaults for the site object.
 	// Save to storage. Ensure the posts exists first so it doesn't error.
 	if s.Site.Posts == nil {
 		s.Site.Posts = make(map[string]model.Post)
@@ -47,6 +49,8 @@ func New(ds Datastorer, site *model.Site) (*Storage, error) {
 	return s, nil
 }
 
+// Save writes the site object to the data storage and returns an error if it
+// cannot be written.
 func (s *Storage) Save() error {
 	var b []byte
 	var err error
@@ -70,6 +74,8 @@ func (s *Storage) Save() error {
 	return nil
 }
 
+// Load reads the site object from the data storage and returns an error if
+// it cannot be read.
 func (s *Storage) Load() error {
 	b, err := s.datastorer.Load()
 	if err != nil {

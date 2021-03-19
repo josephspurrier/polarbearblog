@@ -9,6 +9,7 @@ require (
 	github.com/gorilla/securecookie v1.1.1
 	github.com/matryer/way v0.0.0-20180416093233-9632d0c407b0
 	github.com/mdp/qrterminal/v3 v3.0.0
+	github.com/microcosm-cc/bluemonday v1.0.4
 	github.com/olekukonko/tablewriter v0.0.5 // indirect
 	github.com/russross/blackfriday/v2 v2.1.0
 	github.com/ssor/bom v0.0.0-20170718123548-6386211fdfcf // indirect

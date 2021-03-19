@@ -3,12 +3,14 @@ package htmltemplate
 import (
 	"html/template"
 	"net/http"
+	"os"
 	"time"
 
 	"github.com/josephspurrier/polarbearblog/app/lib/envdetect"
 	"github.com/josephspurrier/polarbearblog/app/model"
 )
 
+// funcMap returns a map of template functions that can be used in templates.
 func (te *Engine) funcMap(r *http.Request) template.FuncMap {
 	fm := make(template.FuncMap)
 	fm["Stamp"] = func(t time.Time) string {
@@ -58,5 +60,25 @@ func (te *Engine) funcMap(r *http.Request) template.FuncMap {
 	fm["SiteFooter"] = func() string {
 		return te.storage.Site.Footer
 	}
+	fm["MFAEnabled"] = func() bool {
+		return len(os.Getenv("SS_MFA_KEY")) > 0
+	}
+	fm["AssetStamp"] = func(f string) string {
+		return assetTimePath(f)
+	}
+	fm["SiteStyles"] = func() template.CSS {
+		return template.CSS(te.storage.Site.Styles)
+	}
+	fm["StylesAppend"] = func() bool {
+		if len(te.storage.Site.Styles) == 0 {
+			// If there are no style, then always append.
+			return true
+		} else if te.storage.Site.StylesAppend {
+			// Else if there are style and it's append, then append.
+			return true
+		}
+		return false
+	}
+
 	return fm
 }

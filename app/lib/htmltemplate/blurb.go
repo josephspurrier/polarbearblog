@@ -3,17 +3,16 @@ package htmltemplate
 import (
 	"strings"
 
-	"github.com/josephspurrier/polarbearblog/app/model"
 	blackfriday "github.com/russross/blackfriday/v2"
 	"jaytaylor.com/html2text"
 )
 
-// MetaDescription -
-func MetaDescription(v model.Post) string {
-	unsafeHTML := blackfriday.Run([]byte(v.Content))
+// PlaintextBlurb returns a plaintext blurb from markdown content.
+func PlaintextBlurb(s string) string {
+	unsafeHTML := blackfriday.Run([]byte(s))
 	plaintext, err := html2text.FromString(string(unsafeHTML))
 	if err != nil {
-		plaintext = v.Content
+		plaintext = s
 	}
 	period := strings.Index(plaintext, ". ")
 	if period > 0 {

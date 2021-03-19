@@ -52,13 +52,13 @@ func (c *AuthUtil) loginPost(w http.ResponseWriter, r *http.Request) (status int
 		return http.StatusBadRequest, nil
 	}
 
-	email := r.FormValue("email")
+	username := r.FormValue("username")
 	password := r.FormValue("password")
 	mfa := r.FormValue("mfa")
 	remember := r.FormValue("remember")
 
-	username := os.Getenv("SS_USERNAME")
-	if len(username) == 0 {
+	allowedUsername := os.Getenv("SS_USERNAME")
+	if len(allowedUsername) == 0 {
 		log.Println("Environment variable missing:", "SS_USERNAME")
 		http.Redirect(w, r, "/", http.StatusFound)
 		return
@@ -71,42 +71,40 @@ func (c *AuthUtil) loginPost(w http.ResponseWriter, r *http.Request) (status int
 		return
 	}
 
+	// Get the MFA key - if the environment variable doesn't exist, then
+	// let the MFA pass.
 	mfakey := os.Getenv("SS_MFA_KEY")
-	if len(mfakey) == 0 {
-		log.Println("Environment variable missing:", "SS_MFA_KEY")
-		http.Redirect(w, r, "/", http.StatusFound)
-		return
-	}
+	mfaSuccess := true
+	if len(mfakey) > 0 {
+		imfa := 0
+		imfa, err = strconv.Atoi(mfa)
+		if err != nil {
+			http.Redirect(w, r, "/", http.StatusFound)
+			return
+		}
 
-	imfa, err := strconv.Atoi(mfa)
-	if err != nil {
-		http.Redirect(w, r, "/", http.StatusFound)
-		return
+		mfaSuccess, err = totp.Authenticate(imfa, mfakey)
+		if err != nil {
+			return http.StatusInternalServerError, err
+		}
 	}
-
-	mfaSuccess, err := totp.Authenticate(imfa, mfakey)
-	if err != nil {
-		http.Redirect(w, r, "/", http.StatusFound)
-		return
-	}
-
-	// Decode the hash - this is to allow it to be stored easily since dollar
-	// signs are difficult to work with.
-	hashDecoded, err := base64.StdEncoding.DecodeString(hash)
-	if err != nil {
-		http.Redirect(w, r, "/", http.StatusFound)
-		return
-	}
-	passMatch := passhash.MatchString(string(hashDecoded), password)
 
 	// When running locally, let any MFA pass.
 	if envdetect.RunningLocalDev() {
 		mfaSuccess = true
 	}
 
+	// Decode the hash - this is to allow it to be stored easily since dollar
+	// signs are difficult to work with.
+	hashDecoded, err := base64.StdEncoding.DecodeString(hash)
+	if err != nil {
+		return http.StatusInternalServerError, err
+	}
+	passMatch := passhash.MatchString(string(hashDecoded), password)
+
 	// If the username and password don't match, then just redirect.
-	if email != username || !passMatch || !mfaSuccess {
-		fmt.Printf("Login attempt failed. Username: %v | Password match: %v | MFA success: %v\n", username, passMatch, mfaSuccess)
+	if username != allowedUsername || !passMatch || !mfaSuccess {
+		fmt.Printf("Login attempt failed. Username: %v (expected: %v) | Password match: %v | MFA success: %v\n", username, allowedUsername, passMatch, mfaSuccess)
 		http.Redirect(w, r, "/", http.StatusFound)
 		return
 	}

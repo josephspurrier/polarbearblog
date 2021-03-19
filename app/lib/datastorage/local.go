@@ -4,19 +4,19 @@ import (
 	"io/ioutil"
 )
 
-// LocalStorage -
+// LocalStorage represents a file on the filesytem.
 type LocalStorage struct {
 	path string
 }
 
-// NewLocalStorage -
-func NewLocalStorage(storagePath string) *LocalStorage {
+// NewLocalStorage returns a local storage object given a file path.
+func NewLocalStorage(path string) *LocalStorage {
 	return &LocalStorage{
-		path: storagePath,
+		path: path,
 	}
 }
 
-// Load -
+// Load returns a file contents from the filesystem.
 func (s *LocalStorage) Load() ([]byte, error) {
 	b, err := ioutil.ReadFile(s.path)
 	if err != nil {
@@ -26,7 +26,7 @@ func (s *LocalStorage) Load() ([]byte, error) {
 	return b, nil
 }
 
-// Save -
+// Save writes a file to the filesystem and returns an error if one occurs.
 func (s *LocalStorage) Save(b []byte) error {
 	err := ioutil.WriteFile(s.path, b, 0644)
 	if err != nil {

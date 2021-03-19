@@ -1,0 +1,25 @@
+{{define "content"}}
+<form method="POST" class="post-form">
+    <input type="hidden" name="token" value="{{.token}}">
+    <p>
+        <label for="id_favicon">Site favicon:</label>
+        <input type="text" name="favicon" value="{{.favicon}}" maxlength="4" id="id_favicon">
+        <span class="helptext"><a href='https://emojicheatsheet.com/' target='_blank'>Emoji cheatsheet</a>
+        </span>
+    </p>
+    <p>
+        <label for="id_stylesappend">Append instead of replace styles:</label> <input type="checkbox" name="stylesappend" id="id_stylesappend" {{if .stylesappend}}checked{{end}}>
+    </p>
+    <p>
+        <label for="id_styles">Site styles (css):</label>
+        <textarea name="styles" cols="40" rows="20" id="id_styles">{{.styles}}</textarea>
+        <span class="helptext">
+            <a href='https://www.cssbed.com/' target='_blank'>No-class css themes.</a>
+        </span>
+        <span class="helptext">
+            You can also paste a link like this: <br /><span>@import 'https://cdn.jsdelivr.net/gh/kognise/water.css@latest/dist/dark.css'</span>;
+        </span>
+    </p>
+    <button type="submit" class="save btn btn-default">Save</button>
+</form>
+{{end}}

@@ -78,7 +78,7 @@ func (c *Post) show(w http.ResponseWriter, r *http.Request) (status int, err err
 	vars["canonical"] = p.Canonical
 	vars["id"] = p.ID
 	vars["posturl"] = p.URL
-	vars["metadescription"] = htmltemplate.MetaDescription(p.Post)
+	vars["metadescription"] = htmltemplate.PlaintextBlurb(p.Content)
 
 	return c.Render.Post(w, r, "base", p.Post, vars)
 }

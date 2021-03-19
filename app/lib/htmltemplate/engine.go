@@ -3,66 +3,58 @@ package htmltemplate
 import (
 	"fmt"
 	"html/template"
-	"io/ioutil"
 	"net/http"
+	"path"
 
 	"github.com/josephspurrier/polarbearblog/app/lib/datastorage"
 	"github.com/josephspurrier/polarbearblog/app/lib/websession"
 	"github.com/josephspurrier/polarbearblog/app/model"
 )
 
-// New -
-func New(ds *datastorage.Storage, sess *websession.Session) *Engine {
+// New returns a HTML template engine.
+func New(ds *datastorage.Storage, sess *websession.Session, sanitize bool) *Engine {
 	return &Engine{
-		storage: ds,
-		sess:    sess,
+		storage:  ds,
+		sess:     sess,
+		sanitize: sanitize,
 	}
 }
 
-// Engine -
+// Engine represents a HTML template engine.
 type Engine struct {
-	storage *datastorage.Storage
-	sess    *websession.Session
+	storage  *datastorage.Storage
+	sess     *websession.Session
+	sanitize bool
 }
 
-// Template -
+// Template renders HTML to a response writer and returns a 200 status code and
+// an error if one occurs.
 func (te *Engine) Template(w http.ResponseWriter, r *http.Request, mainTemplate string,
 	partialTemplate string, vars map[string]interface{}) (status int, err error) {
 	return te.internalTemplate(w, r, mainTemplate, partialTemplate, http.StatusOK, vars)
 }
 
-// ErrorTemplate -
+// ErrorTemplate renders HTML to a response writer and returns a 404 status code
+// and an error if one occurs.
 func (te *Engine) ErrorTemplate(w http.ResponseWriter, r *http.Request, mainTemplate string,
 	partialTemplate string, vars map[string]interface{}) (status int, err error) {
 	return te.internalTemplate(w, r, mainTemplate, partialTemplate, http.StatusNotFound, vars)
 }
 
-// internalTemplate -
+// internalTemplate converts content from markdown to HTML and then outputs to
+// a response writer. Returns an HTTP status code and an error if one occurs.
 func (te *Engine) internalTemplate(w http.ResponseWriter, r *http.Request, mainTemplate string,
 	partialTemplate string, statusCode int, vars map[string]interface{}) (status int, err error) {
 	// Functions available in the templates.
 	fm := te.funcMap(r)
 
-	// Load main template.
-	base, err := ioutil.ReadFile(fmt.Sprintf("html/%v.tmpl", mainTemplate))
-	if err != nil {
-		return http.StatusInternalServerError, err
-	}
+	baseTemplate := fmt.Sprintf("html/%v.tmpl", mainTemplate)
+	headerTemplate := "html/partial/head.tmpl"
+	contentTemplate := fmt.Sprintf("html/partial/%v.tmpl", partialTemplate)
 
 	// Parse the main template with the functions.
-	t, err := template.New("root").Funcs(fm).Parse(string(base))
-	if err != nil {
-		return http.StatusInternalServerError, err
-	}
-
-	// Read the partial.
-	content, err := ioutil.ReadFile(fmt.Sprintf("html/partial/%v.tmpl", partialTemplate))
-	if err != nil {
-		return http.StatusInternalServerError, err
-	}
-
-	// Parse the partial with the main template.
-	t, err = t.Parse(string(content))
+	t, err := template.New(path.Base(baseTemplate)).Funcs(fm).ParseFiles(baseTemplate,
+		headerTemplate, contentTemplate)
 	if err != nil {
 		return http.StatusInternalServerError, err
 	}
@@ -78,7 +70,8 @@ func (te *Engine) internalTemplate(w http.ResponseWriter, r *http.Request, mainT
 	return statusCode, nil
 }
 
-// Post -
+// Post converts a site post from markdown to HTML and then outputs to response
+// writer. Returns an HTTP status code and an error if one occurs.
 func (te *Engine) Post(w http.ResponseWriter, r *http.Request, mainTemplate string,
 	post model.Post, vars map[string]interface{}) (status int, err error) {
 	// Functions available in the templates.
@@ -89,20 +82,17 @@ func (te *Engine) Post(w http.ResponseWriter, r *http.Request, mainTemplate stri
 		return http.StatusNotFound, nil
 	}
 
-	// Load main template.
-	base, err := ioutil.ReadFile(fmt.Sprintf("html/%v.tmpl", mainTemplate))
-	if err != nil {
-		return http.StatusInternalServerError, err
-	}
+	baseTemplate := fmt.Sprintf("html/%v.tmpl", mainTemplate)
+	headerTemplate := "html/partial/head.tmpl"
 
 	// Parse the main template with the functions.
-	t, err := template.New("root").Funcs(fm).Parse(string(base))
+	t, err := template.New(path.Base(baseTemplate)).Funcs(fm).ParseFiles(baseTemplate, headerTemplate)
 	if err != nil {
 		return http.StatusInternalServerError, err
 	}
 
 	// Parse the content.
-	t, err = sanitizedContent(t, post.Content)
+	t, err = te.sanitizedContent(t, post.Content)
 	if err != nil {
 		return http.StatusInternalServerError, err
 	}

@@ -134,7 +134,7 @@ func (c *XMLUtil) rss(w http.ResponseWriter, r *http.Request) (status int, err e
 	}
 
 	for _, v := range c.Storage.Site.PostsAndPages(true) {
-		plaintext := htmltemplate.MetaDescription(v.Post)
+		plaintext := htmltemplate.PlaintextBlurb(v.Post.Content)
 		m.Items = append(m.Items, Item{
 			Title:       v.Title,
 			Link:        c.Storage.Site.SiteURL() + "/" + v.FullURL(),
