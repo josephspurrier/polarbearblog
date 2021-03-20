@@ -27,6 +27,37 @@
     <footer>
         {{SiteFooter}}
     </footer>
+
+    {{if EnableStackEdit}}
+    <script src="https://unpkg.com/stackedit-js@1.0.7/docs/lib/stackedit.min.js"></script>
+    <script type="text/javascript">
+    function openStackEditor(elementName) {
+        const el = document.querySelector(`textarea[name="${elementName}"]`);
+        const stackedit = new Stackedit();
+
+        // Open the iframe.
+        stackedit.openFile({
+            content: {
+                text: el.value,
+                properties: {
+                    extensions: {
+                        preset: 'commonmark',
+                        markdown: {
+                            table: true,
+                        }
+                    },
+                    colorTheme: 'dark',
+                }
+            }
+        });
+
+        // Listen to StackEdit events and apply the changes to the textarea.
+        stackedit.on('fileChange', (file) => {
+            el.value = file.content.text;
+        });
+    }
+    </script>
+    {{end}}
 </body>
 
 </html>

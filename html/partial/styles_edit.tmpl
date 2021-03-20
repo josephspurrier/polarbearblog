@@ -8,7 +8,12 @@
         </span>
     </p>
     <p>
-        <label for="id_stylesappend">Append instead of replace styles:</label> <input type="checkbox" name="stylesappend" id="id_stylesappend" {{if .stylesappend}}checked{{end}}>
+        <label for="id_stackedit">Enable <a href="https://stackedit.io/" target='_blank'>StackEdit</a> for editing markdown:</label>
+        <input type="checkbox" name="stackedit" id="id_stackedit" {{if .stackedit}}checked{{end}}>
+    </p>
+    <p>
+        <label for="id_stylesappend">Append instead of replace styles:</label>
+        <input type="checkbox" name="stylesappend" id="id_stylesappend" {{if .stylesappend}}checked{{end}}>
     </p>
     <p>
         <label for="id_styles">Site styles (css):</label>

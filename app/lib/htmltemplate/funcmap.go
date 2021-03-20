@@ -79,6 +79,9 @@ func (te *Engine) funcMap(r *http.Request) template.FuncMap {
 		}
 		return false
 	}
+	fm["EnableStackEdit"] = func() bool {
+		return te.storage.Site.StackEdit
+	}
 
 	return fm
 }

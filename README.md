@@ -135,10 +135,14 @@ When `PBB_LOCAL` is set, the following things will happen:
 
 ![Styles](doc/images/site-styles.png)
 
-### Edit a Post
+### Create a Post
 
-![Edit a Post](doc/images/post-edit.png)
+![Create a Post](doc/images/post-create.png)
 
 ### View a Post
 
 ![View a Post](doc/images/post.png)
+
+### StackEdit
+
+![StackEdit](doc/images/stackedit.png)

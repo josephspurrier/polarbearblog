@@ -25,8 +25,14 @@
     <p>
         <label for="id_content">Content (markdown):</label>
         <textarea name="content" cols="40" rows="20" required id="id_content"></textarea>
+        {{if EnableStackEdit}}
         <span class="helptext">
-            <a href='https://simplemde.com/markdown-guide' target='_blank'>Markdown cheatsheet</a>
+            <button type="button" onclick="openStackEditor('content');">Markdown editor</button>
+        </span>
+        |
+        {{end}}
+        <span class="helptext">
+            <a href='https://www.markdownguide.org/cheat-sheet/' target='_blank'>Markdown cheatsheet</a>
         </span>
         |
         <span class="helptext">

@@ -21,6 +21,7 @@ func (c *Styles) edit(w http.ResponseWriter, r *http.Request) (status int, err e
 	vars["favicon"] = c.Storage.Site.Favicon
 	vars["styles"] = c.Storage.Site.Styles
 	vars["stylesappend"] = c.Storage.Site.StylesAppend
+	vars["stackedit"] = c.Storage.Site.StackEdit
 
 	return c.Render.Template(w, r, "dashboard", "styles_edit", vars)
 }
@@ -37,6 +38,7 @@ func (c *Styles) update(w http.ResponseWriter, r *http.Request) (status int, err
 	c.Storage.Site.Favicon = r.FormValue("favicon")
 	c.Storage.Site.Styles = r.FormValue("styles")
 	c.Storage.Site.StylesAppend = (r.FormValue("stylesappend") == "on")
+	c.Storage.Site.StackEdit = (r.FormValue("stackedit") == "on")
 
 	err = c.Storage.Save()
 	if err != nil {
