@@ -11,14 +11,7 @@ body {
     color: #444;
 }
 
-h1,
-h2,
-h3,
-h4,
-h5,
-h6,
-strong,
-b {
+h1, h2, h3, h4, h5, h6, strong, b {
     color: #222;
 }
 
@@ -39,6 +32,7 @@ a {
     content: "ᕦʕ •ᴥ•ʔᕤ";
     font-weight: 400;
 }
+
 .bear:hover::before {
     content: "ᕙʕ ಠᴥಠʔᕗ";
     font-weight: 400;
@@ -56,8 +50,8 @@ textarea {
 input:not([type="submit"]) {
     font-size: 16px;
 }
-textarea,
-input:not([type="submit"]) {
+
+textarea, input:not([type="submit"]) {
     background-color: inherit;
     color: inherit;
     border: 1px dashed;
@@ -116,17 +110,16 @@ footer {
     text-align: center;
 }
 
-#date-range,
-#initial-values {
+#date-range, #initial-values {
     display: none;
 }
 
-#date-range:target,
-#initial-values:target {
+#date-range:target, #initial-values:target {
     display: block;
 }
 
 /* dashboard post list*/
+
 ul.post-list {
     list-style-type: none;
     padding: unset;
@@ -156,6 +149,7 @@ ul.post-list li small {
 }
 
 /* blog posts */
+
 ul.blog-posts {
     list-style-type: none;
     padding: unset;
@@ -170,7 +164,7 @@ ul.blog-posts li span {
 }
 
 ul.blog-posts li a:visited {
-  color: #8b6fcb;
+    color: #8b6fcb;
 }
 
 #disqus_thread {
@@ -179,37 +173,24 @@ ul.blog-posts li a:visited {
 
 @media (prefers-color-scheme: dark) {
     body {
-        background-color:#01242e;
+        background-color: #01242e;
         color: #ddd;
     }
-
-    h1,
-    h2,
-    h3,
-    h4,
-    h5,
-    h6,
-    strong,
-    b {
+    h1, h2, h3, h4, h5, h6, strong, b {
         color: #eee;
     }
-
     a {
         color: #8cc2dd;
     }
-
     code {
         background-color: #777;
     }
-
     pre code {
         color: #ddd;
     }
-
     blockquote {
         color: #ccc;
     }
-
     .helptext {
         color: #aaa;
     }
