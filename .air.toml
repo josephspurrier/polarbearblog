@@ -15,9 +15,9 @@ full_bin = "PBB_LOCAL=true ./tmp/main"
 # Watch these filename extensions.
 include_ext = ["go", "tmpl", "css"]
 # Ignore these filename extensions or directories.
-exclude_dir = ["assets", "tmp", "vendor"]
+exclude_dir = ["tmp", "vendor"]
 # Watch these directories if you specified.
-include_dir = []
+include_dir = ["app", "assets", "cmd", "html"]
 # Exclude files.
 exclude_file = []
 # Exclude unchanged files.
