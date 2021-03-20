@@ -1,6 +1,6 @@
 # Run this workflow every time a new commit or PR pushed to the repository.
 on: [push, pull_request]
-name: Test
+#name: Test
 jobs:
   build-test2:
     strategy:
@@ -15,5 +15,5 @@ jobs:
         go-version: ${{ matrix.go-version }}
     - name: Checkout code
       uses: actions/checkout@v2
-    - name: Test2
+    - name: Run all unit tests
       run: go test ./...
