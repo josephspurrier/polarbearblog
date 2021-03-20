@@ -17,7 +17,7 @@ import (
 	"github.com/josephspurrier/polarbearblog/app/route"
 )
 
-const (
+var (
 	storageSitePath    = "storage/site.json"
 	storageSessionPath = "storage/session.bin"
 	sessionName        = "session"
@@ -25,6 +25,22 @@ const (
 
 // Boot -
 func Boot() (http.Handler, error) {
+	// Set the storage and session environment variables.
+	sitePath := os.Getenv("SS_SITE_PATH")
+	if len(sitePath) > 0 {
+		storageSitePath = sitePath
+	}
+
+	sessionPath := os.Getenv("SS_SESSION_PATH")
+	if len(sessionPath) > 0 {
+		storageSessionPath = sessionPath
+	}
+
+	sname := os.Getenv("SS_SESSION_NAME")
+	if len(sname) > 0 {
+		sessionName = sname
+	}
+
 	// Get the environment variables.
 	secretKey := os.Getenv("SS_SESSION_KEY")
 	if len(secretKey) == 0 {
