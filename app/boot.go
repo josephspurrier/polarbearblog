@@ -2,7 +2,6 @@ package app
 
 import (
 	"fmt"
-	"log"
 	"net/http"
 	"os"
 	"strconv"
@@ -25,21 +24,21 @@ const (
 )
 
 // Boot -
-func Boot() {
+func Boot() (http.Handler, error) {
 	// Get the environment variables.
 	secretKey := os.Getenv("SS_SESSION_KEY")
 	if len(secretKey) == 0 {
-		log.Fatalln("Environment variable missing:", "SS_SESSION_KEY")
+		return nil, fmt.Errorf("environment variable missing: %v", "SS_SESSION_KEY")
 	}
 
 	bucket := os.Getenv("GCP_BUCKET_NAME")
 	if len(bucket) == 0 {
-		log.Fatalln("Environment variable missing:", "GCP_BUCKET_NAME")
+		return nil, fmt.Errorf("environment variable missing: %v", "GCP_BUCKET_NAME")
 	}
 
 	allowHTML, err := strconv.ParseBool(os.Getenv("SS_ALLOW_HTML"))
 	if err != nil {
-		log.Fatalln("Environment variable not able to parse as bool:", "SS_ALLOW_HTML")
+		return nil, fmt.Errorf("environment variable not able to parse as bool: %v", "SS_ALLOW_HTML")
 	}
 
 	// Create new store object with the defaults.
@@ -61,14 +60,14 @@ func Boot() {
 	// Set up the data storage provider.
 	storage, err := datastorage.New(ds, site)
 	if err != nil {
-		log.Fatalln(err.Error())
+		return nil, err
 	}
 
 	// Set up the session storage provider.
 	en := websession.NewEncryptedStorage(secretKey)
 	store, err := websession.NewJSONSession(ss, en)
 	if err != nil {
-		log.Fatalln(err)
+		return nil, err
 	}
 
 	// Initialize a new session manager and configure the session lifetime.
@@ -84,7 +83,7 @@ func Boot() {
 	// Setup the routes.
 	c, err := route.Register(storage, sess, tmpl)
 	if err != nil {
-		log.Fatalln(err.Error())
+		return nil, err
 	}
 
 	// Set up the router and middleware.
@@ -98,12 +97,5 @@ func Boot() {
 	mw = middleware.Gzip(mw)
 	mw = h.LogRequest(mw)
 
-	// Start the web server.
-	port := os.Getenv("PORT")
-	if port == "" {
-		port = "8080"
-	}
-
-	fmt.Println("Web server running on port:", port)
-	log.Fatalln(http.ListenAndServe(":"+port, mw))
+	return mw, nil
 }
