@@ -5,9 +5,9 @@ import (
 	"log"
 	"os"
 
-	"github.com/mdp/qrterminal/v3"
 	"github.com/josephspurrier/polarbearblog/app/lib/timezone"
 	"github.com/josephspurrier/polarbearblog/app/lib/totp"
+	"github.com/mdp/qrterminal/v3"
 )
 
 func init() {
