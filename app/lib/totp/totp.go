@@ -5,29 +5,9 @@ import (
 	"crypto/rand"
 	"encoding/base32"
 	"fmt"
-	"time"
 
 	"github.com/dgryski/dgoogauth"
 )
-
-// LoginCode -
-func LoginCode(secret string) int {
-	config := configuration(secret)
-
-	// Generate the time based on 30 second time periods.
-	nowRaw := time.Now()
-	seconds := 0
-	if nowRaw.Second() > 30 {
-		seconds = 30
-	}
-	now := time.Date(nowRaw.Year(), nowRaw.Month(), nowRaw.Day(), nowRaw.Hour(), nowRaw.Minute(), seconds, 0, nowRaw.Location())
-
-	// Generate the challenge.
-	t0 := int64(now.Unix() / 30)
-	c := dgoogauth.ComputeCode(config.Secret, t0)
-
-	return c
-}
 
 // Authenticate will return true and not error if the TOTP (time-based) is
 // valid. Any integers less than 6 characters will be padded to six.

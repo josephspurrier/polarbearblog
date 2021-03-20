@@ -278,3 +278,23 @@ func Test400(t *testing.T) {
 
 	assert.Equal(t, http.StatusNotFound, w.Code)
 }
+
+func TestNotFound(t *testing.T) {
+	mux := New(defaultServeHTTP, nil)
+
+	r := httptest.NewRequest("GET", "/unknown", nil)
+	w := httptest.NewRecorder()
+	mux.NotFound(w, r)
+
+	assert.Equal(t, http.StatusNotFound, w.Code)
+}
+
+func TestBadRequest(t *testing.T) {
+	mux := New(defaultServeHTTP, nil)
+
+	r := httptest.NewRequest("GET", "/unknown", nil)
+	w := httptest.NewRecorder()
+	mux.BadRequest(w, r)
+
+	assert.Equal(t, http.StatusBadRequest, w.Code)
+}
