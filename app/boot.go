@@ -107,7 +107,7 @@ func Boot() (http.Handler, error) {
 	mw = c.Router
 	h := middleware.NewHandler(c.Render, c.Sess, c.Router, c.Storage.Site.URL, c.Storage.Site.Scheme)
 	mw = h.Redirect(mw)
-	mw = h.Head(mw)
+	mw = middleware.Head(mw)
 	mw = h.DisallowAnon(mw)
 	mw = sessionManager.LoadAndSave(mw)
 	mw = middleware.Gzip(mw)

@@ -5,7 +5,7 @@ import (
 )
 
 // Head will return a 200 for the uptimerobot.
-func (c *Handler) Head(next http.Handler) http.Handler {
+func Head(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		if r.URL.Path == "/" && r.Method == http.MethodHead {
 			return

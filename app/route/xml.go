@@ -15,12 +15,13 @@ type XMLUtil struct {
 }
 
 func registerXMLUtil(c *XMLUtil) {
-	c.Router.Get("/robots.txt", c.robots)
+	c.Router.Get("/robots.txt", c.Robots)
 	c.Router.Get("/sitemap.xml", c.sitemap)
 	c.Router.Get("/rss.xml", c.rss)
 }
 
-func (c *XMLUtil) robots(w http.ResponseWriter, r *http.Request) (status int, err error) {
+// Robots returns a page for web crawlers.
+func (c *XMLUtil) Robots(w http.ResponseWriter, r *http.Request) (status int, err error) {
 	w.Header().Set("Content-Type", "text/plain")
 	text :=
 		`User-agent: *
