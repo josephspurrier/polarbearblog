@@ -7,7 +7,7 @@
 
 Lightweight blogging system for a single author. Written in Go and deploys to your own GCP project with a few commands. It's a derivative of the beautifully simple [Bear Blog 🐻](https://bearblog.dev/). The data storage and session storage are stored in Google Cloud Storage as objects. Depending on the traffic and blog size, it should (not guaranteed) cost less than $1 USD per month (compute and storage) to host this blog because it will be deployed to [Google Cloud Run](https://cloud.google.com/run/pricing) which bills to the nearest 100 millisecond. You can also [map your own domain name](https://cloud.google.com/run/docs/mapping-custom-domains) and Google will provide a free SSL certificate. This project uses `make` to simplify the deployment process.
 
-You can see an active website using this stack [here](https://www.josephspurrier.com/).
+You can see an active website using this stack [here](https://www.josephspurrier.com/). You can read the blog post on this project [here](https://www.josephspurrier.com/polar-bear-blog).
 
 ## Quickstart on Local
 
