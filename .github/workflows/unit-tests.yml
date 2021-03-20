@@ -23,4 +23,11 @@ jobs:
       uses: actions/checkout@v2
     # Run all the unit tests.
     - name: Run all unit tests
-      run: go test ./...
+      run: go test -race -covermode atomic -coverprofile=covprofile ./...
+    # Install goveralls.
+    - name: Install goveralls
+      env:
+        GO111MODULE: off
+      run: go get github.com/mattn/goveralls
+    - name: Send coverage
+      run: goveralls -coverprofile=covprofile -service=github
