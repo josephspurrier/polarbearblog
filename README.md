@@ -28,7 +28,7 @@ PBB_ALLOW_HTML=false
 PBB_GCP_BUCKET_NAME=sample-bucket
 ## Optional: enable MFA (TOTP) that works with apps like Google Authenticator. Generate with: make mfa
 # PBB_MFA_KEY=
-## Optional: set the timezone from here:
+## Optional: set the time zone from here:
 ## https://golang.org/src/time/zoneinfo_abbrs_windows.go
 # PBB_TIMEZONE=America/New_York
 

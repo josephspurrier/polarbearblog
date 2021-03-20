@@ -12,7 +12,7 @@ import (
 func init() {
 	// Verbose logging with file name and line number.
 	log.SetFlags(log.Lshortfile)
-	// Set the timezone.
+	// Set the time zone.
 	timezone.Set()
 }
 
