@@ -10,13 +10,13 @@ import (
 	"cloud.google.com/go/storage"
 )
 
-// GCPStorage represents a Google Storage object.
+// GCPStorage represents a Google Cloud Storage object.
 type GCPStorage struct {
 	bucket string
 	object string
 }
 
-// NewGCPStorage returns a Google storage item given a bucket and an object
+// NewGCPStorage returns a Google Cloud storage item given a bucket and an object
 // path.
 func NewGCPStorage(bucket string, object string) *GCPStorage {
 	return &GCPStorage{

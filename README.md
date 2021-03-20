@@ -55,7 +55,7 @@ PBB_LOCAL=true
 
 - To generate the `PBB_SESSION_KEY` variable for .env, run: `make privatekey`. Overwrite the line in the `.env` file.
 - To generate the `PBB_PASSWORD_HASH` variable for .env, run: `make passhash passwordhere`. Replace with your password. Overwrite the line in the `.env` file.
-- To create the storage files in the storage folder, run: `make local-init`
+- To create the session and site files in the storage folder, run: `make local-init`
 - To start the webserver on port 8080, run: `make local-run`
 
 The login page is located at: http://localhost:8080/login/admin.
@@ -115,7 +115,7 @@ make
 
 When `PBB_LOCAL` is set, the following things will happen:
 
-- data storage will be the local filesystem instead of in GCP Cloud Storage
+- data storage will be the local filesystem instead of in Google Cloud Storage
 - redirects will no be attempted so you can use localhost:8080
 - MFA, if enable will accept any number and will always pass validation
 - Google Analytics will be disabled if set
