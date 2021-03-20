@@ -43,7 +43,7 @@ func (s *Session) User(r *http.Request) (string, bool) {
 	return u, len(u) > 0
 }
 
-// SetString -
+// SetUser -
 func (s *Session) SetUser(r *http.Request, value string) {
 	s.manager.Put(r.Context(), "user", value)
 }

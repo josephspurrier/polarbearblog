@@ -16,6 +16,6 @@ func (fn handler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	fn.CustomServeHTTP(w, r, status, err)
 }
 
-// Handler is used to wrapper all endpoint functions so they work with generic
+// HandlerFunc is used to wrapper all endpoint functions so they work with generic
 // routers.
 type HandlerFunc func(http.ResponseWriter, *http.Request) (int, error)

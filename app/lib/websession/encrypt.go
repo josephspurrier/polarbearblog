@@ -27,6 +27,9 @@ func NewEncryptedStorage(privatekey string) *EncryptedStorage {
 func (en *EncryptedStorage) Encrypt(data []byte) ([]byte, error) {
 	// Convert key to byte array.
 	key, err := hex.DecodeString(en.privatekey)
+	if err != nil {
+		return nil, err
+	}
 
 	// Create a new cipher block from the key.
 	block, err := aes.NewCipher(key)
