@@ -7,7 +7,7 @@ import (
 	"github.com/alexedwards/scs/v2"
 )
 
-// Sessionstorer -
+// Sessionstorer reads and writes data to an object.
 type Sessionstorer interface {
 	Save([]byte) error
 	Load() ([]byte, error)
