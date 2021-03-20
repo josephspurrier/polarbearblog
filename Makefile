@@ -22,26 +22,26 @@ default: gcp-push
 .PHONY: gcp-init
 gcp-init:
 	@echo Pushing to GCP storage initial files.
-	gsutil mb -p $(GCP_PROJECT_ID) -l ${GCP_REGION} -c Standard gs://${GCP_BUCKET_NAME}
-	gsutil versioning set on gs://${GCP_BUCKET_NAME}
-	gsutil cp testdata/empty.json gs://${GCP_BUCKET_NAME}/storage/site.json
-	gsutil cp testdata/empty.json gs://${GCP_BUCKET_NAME}/storage/session.json
+	gsutil mb -p $(PBB_GCP_PROJECT_ID) -l ${PBB_GCP_REGION} -c Standard gs://${PBB_GCP_BUCKET_NAME}
+	gsutil versioning set on gs://${PBB_GCP_BUCKET_NAME}
+	gsutil cp testdata/empty.json gs://${PBB_GCP_BUCKET_NAME}/storage/site.json
+	gsutil cp testdata/empty.json gs://${PBB_GCP_BUCKET_NAME}/storage/session.json
 
 .PHONY: gcp-push
 gcp-push:
 	@echo Pushing to GCP.
-	gcloud builds submit --tag gcr.io/$(GCP_PROJECT_ID)/${GCP_IMAGE_NAME}
-	gcloud run deploy --image gcr.io/$(GCP_PROJECT_ID)/${GCP_IMAGE_NAME} \
+	gcloud builds submit --tag gcr.io/$(PBB_GCP_PROJECT_ID)/${PBB_GCP_IMAGE_NAME}
+	gcloud run deploy --image gcr.io/$(PBB_GCP_PROJECT_ID)/${PBB_GCP_IMAGE_NAME} \
 		--platform managed \
 		--allow-unauthenticated \
-		--region ${GCP_REGION} ${GCP_CLOUDRUN_NAME} \
-		--update-env-vars SS_USERNAME=${SS_USERNAME} \
-		--update-env-vars SS_SESSION_KEY=${SS_SESSION_KEY} \
-		--update-env-vars SS_PASSWORD_HASH=${SS_PASSWORD_HASH} \
-		--update-env-vars SS_MFA_KEY="${SS_MFA_KEY}" \
-		--update-env-vars GCP_PROJECT_ID=${GCP_PROJECT_ID} \
-		--update-env-vars GCP_BUCKET_NAME=${GCP_BUCKET_NAME} \
-		--update-env-vars SS_ALLOW_HTML=${SS_ALLOW_HTML}
+		--region ${PBB_GCP_REGION} ${PBB_GCP_CLOUDRUN_NAME} \
+		--update-env-vars PBB_USERNAME=${PBB_USERNAME} \
+		--update-env-vars PBB_SESSION_KEY=${PBB_SESSION_KEY} \
+		--update-env-vars PBB_PASSWORD_HASH=${PBB_PASSWORD_HASH} \
+		--update-env-vars PBB_MFA_KEY="${PBB_MFA_KEY}" \
+		--update-env-vars PBB_GCP_PROJECT_ID=${PBB_GCP_PROJECT_ID} \
+		--update-env-vars PBB_GCP_BUCKET_NAME=${PBB_GCP_BUCKET_NAME} \
+		--update-env-vars PBB_ALLOW_HTML=${PBB_ALLOW_HTML}
 
 .PHONY: privatekey
 privatekey:

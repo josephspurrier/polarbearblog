@@ -17,44 +17,44 @@ You can see an active website using this stack [here](https://www.josephspurrier
 ```bash
 # App Configuration
 ## Session key to encrypt the cookie store. Generate with: make privatekey
-SS_SESSION_KEY=
+PBB_SESSION_KEY=
 ## Password hash that is base64 encoded. Generate with: make passhash passwordhere
-SS_PASSWORD_HASH=
+PBB_PASSWORD_HASH=
 ## Username to use to login to the platform at: https://example.run.app/login/admin
-SS_USERNAME=admin
+PBB_USERNAME=admin
 ## Enable use of HTML in markdown editors.
-SS_ALLOW_HTML=false
+PBB_ALLOW_HTML=false
 ## GCP bucket name (this can be one that doesn't exist yet).
-GCP_BUCKET_NAME=sample-bucket
+PBB_GCP_BUCKET_NAME=sample-bucket
 ## Optional: enable MFA (TOTP) that works with apps like Google Authenticator. Generate with: make mfa
-# SS_MFA_KEY=
+# PBB_MFA_KEY=
 ## Optional: set the timezone from here:
 ## https://golang.org/src/time/zoneinfo_abbrs_windows.go
-# SS_TIMEZONE=America/New_York
+# PBB_TIMEZONE=America/New_York
 
 # GCP Deployment
 ## GCP project ID.
-GCP_PROJECT_ID=my-sample-project-191923
+PBB_GCP_PROJECT_ID=my-sample-project-191923
 ## Name of the docker image that will be created and stored in GCP Repository.
-GCP_IMAGE_NAME=sample-image
+PBB_GCP_IMAGE_NAME=sample-image
 ## Name of the Cloud Run service to create.
-GCP_CLOUDRUN_NAME=sample-service
+PBB_GCP_CLOUDRUN_NAME=sample-service
 ## Region (not zone) where the Cloud Run service will be created:
 ## https://cloud.google.com/compute/docs/regions-zones#available
-GCP_REGION=us-central1
+PBB_GCP_REGION=us-central1
 
 # MFA Configuration
 ## Friendly identifier when you generate the MFA string.
-SS_ISSUER=www.example.com
+PBB_ISSUER=www.example.com
 
 # Local Development
 ## Set this to any value to allow you to do testing locally without GCP access.
 ## See 'Local Development Flag' section below for more information.
-SS_LOCAL=true
+PBB_LOCAL=true
 ```
 
-- To generate the `SS_SESSION_KEY` variable for .env, run: `make privatekey`. Overwrite the line in the `.env` file.
-- To generate the `SS_PASSWORD_HASH` variable for .env, run: `make passhash passwordhere`. Replace with your password. Overwrite the line in the `.env` file.
+- To generate the `PBB_SESSION_KEY` variable for .env, run: `make privatekey`. Overwrite the line in the `.env` file.
+- To generate the `PBB_PASSWORD_HASH` variable for .env, run: `make passhash passwordhere`. Replace with your password. Overwrite the line in the `.env` file.
 - To create the storage files in the storage folder, run: `make local-init`
 - To start the webserver on port 8080, run: `make local-run`
 
@@ -62,8 +62,8 @@ The login page is located at: http://localhost:8080/login/admin.
 
 To login, you'll need:
 
-- the username from the .env file for variable `SS_USERNAME` - the default is: `admin`
-- the password from the .env file for which the `SS_PASSWORD_HASH` was derived
+- the username from the .env file for variable `PBB_USERNAME` - the default is: `admin`
+- the password from the .env file for which the `PBB_PASSWORD_HASH` was derived
 
 Once you are logged in, you should see a new menu option call `Dashboard`. From this screen, you'll be able to make changes to the site as we as the home page. To add new posts, click on `Posts` and add the posts or pages from there.
 
@@ -113,7 +113,7 @@ make
 
 ### Local Development Flag
 
-When `SS_LOCAL` is set, the following things will happen:
+When `PBB_LOCAL` is set, the following things will happen:
 
 - data storage will be the local filesystem instead of in GCP Storage
 - redirects will no be attempted so you can use localhost:8080

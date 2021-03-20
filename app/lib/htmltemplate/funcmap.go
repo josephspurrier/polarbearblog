@@ -61,7 +61,7 @@ func (te *Engine) funcMap(r *http.Request) template.FuncMap {
 		return te.storage.Site.Footer
 	}
 	fm["MFAEnabled"] = func() bool {
-		return len(os.Getenv("SS_MFA_KEY")) > 0
+		return len(os.Getenv("PBB_MFA_KEY")) > 0
 	}
 	fm["AssetStamp"] = func(f string) string {
 		return assetTimePath(f)

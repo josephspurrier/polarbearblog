@@ -26,35 +26,35 @@ var (
 // Boot -
 func Boot() (http.Handler, error) {
 	// Set the storage and session environment variables.
-	sitePath := os.Getenv("SS_SITE_PATH")
+	sitePath := os.Getenv("PBB_SITE_PATH")
 	if len(sitePath) > 0 {
 		storageSitePath = sitePath
 	}
 
-	sessionPath := os.Getenv("SS_SESSION_PATH")
+	sessionPath := os.Getenv("PBB_SESSION_PATH")
 	if len(sessionPath) > 0 {
 		storageSessionPath = sessionPath
 	}
 
-	sname := os.Getenv("SS_SESSION_NAME")
+	sname := os.Getenv("PBB_SESSION_NAME")
 	if len(sname) > 0 {
 		sessionName = sname
 	}
 
 	// Get the environment variables.
-	secretKey := os.Getenv("SS_SESSION_KEY")
+	secretKey := os.Getenv("PBB_SESSION_KEY")
 	if len(secretKey) == 0 {
-		return nil, fmt.Errorf("environment variable missing: %v", "SS_SESSION_KEY")
+		return nil, fmt.Errorf("environment variable missing: %v", "PBB_SESSION_KEY")
 	}
 
-	bucket := os.Getenv("GCP_BUCKET_NAME")
+	bucket := os.Getenv("PBB_GCP_BUCKET_NAME")
 	if len(bucket) == 0 {
-		return nil, fmt.Errorf("environment variable missing: %v", "GCP_BUCKET_NAME")
+		return nil, fmt.Errorf("environment variable missing: %v", "PBB_GCP_BUCKET_NAME")
 	}
 
-	allowHTML, err := strconv.ParseBool(os.Getenv("SS_ALLOW_HTML"))
+	allowHTML, err := strconv.ParseBool(os.Getenv("PBB_ALLOW_HTML"))
 	if err != nil {
-		return nil, fmt.Errorf("environment variable not able to parse as bool: %v", "SS_ALLOW_HTML")
+		return nil, fmt.Errorf("environment variable not able to parse as bool: %v", "PBB_ALLOW_HTML")
 	}
 
 	// Create new store object with the defaults.

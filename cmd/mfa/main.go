@@ -18,14 +18,14 @@ func init() {
 }
 
 func main() {
-	username := os.Getenv("SS_USERNAME")
+	username := os.Getenv("PBB_USERNAME")
 	if len(username) == 0 {
-		log.Fatalln("Environment variable missing:", "SS_USERNAME")
+		log.Fatalln("Environment variable missing:", "PBB_USERNAME")
 	}
 
-	issuer := os.Getenv("SS_ISSUER")
+	issuer := os.Getenv("PBB_ISSUER")
 	if len(issuer) == 0 {
-		log.Fatalln("Environment variable missing:", "SS_ISSUER")
+		log.Fatalln("Environment variable missing:", "PBB_ISSUER")
 	}
 
 	// Generate a MFA.
@@ -35,7 +35,7 @@ func main() {
 	}
 
 	// Output the TOTP URI and config information.
-	fmt.Printf("SS_MFA_KEY=%v\n", secret)
+	fmt.Printf("PBB_MFA_KEY=%v\n", secret)
 	fmt.Println("")
 	fmt.Println("Send this to a mobile phone to add it to an app like Google Authenticator or scan the QR code below:")
 	fmt.Printf("%v\n", URI)

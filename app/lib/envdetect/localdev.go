@@ -4,9 +4,9 @@ import (
 	"os"
 )
 
-// RunningLocalDev returns true if the SS_LOCAL environment variable is set.
+// RunningLocalDev returns true if the PBB_LOCAL environment variable is set.
 func RunningLocalDev() bool {
-	s := os.Getenv("SS_LOCAL")
+	s := os.Getenv("PBB_LOCAL")
 	if len(s) > 0 {
 		return true
 	}

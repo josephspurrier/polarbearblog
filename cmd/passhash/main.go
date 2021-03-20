@@ -29,5 +29,5 @@ func main() {
 	}
 
 	sss := base64.StdEncoding.EncodeToString([]byte(s))
-	fmt.Printf("SS_PASSWORD_HASH=%v\n", sss)
+	fmt.Printf("PBB_PASSWORD_HASH=%v\n", sss)
 }

@@ -11,7 +11,7 @@ cmd = "go build -o ./tmp/main ."
 # Binary file yields from `cmd`.
 bin = "tmp/main"
 # Customize binary.
-full_bin = "SS_LOCAL=true ./tmp/main"
+full_bin = "PBB_LOCAL=true ./tmp/main"
 # Watch these filename extensions.
 include_ext = ["go", "tmpl", "css"]
 # Ignore these filename extensions or directories.

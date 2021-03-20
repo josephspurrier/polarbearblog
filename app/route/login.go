@@ -25,6 +25,7 @@ func registerAuthUtil(c *AuthUtil) {
 	c.Router.Get("/dashboard/logout", c.logout)
 }
 
+// login allows a user to login to the dashboard.
 func (c *AuthUtil) login(w http.ResponseWriter, r *http.Request) (status int, err error) {
 	slug := way.Param(r.Context(), "slug")
 	if slug != c.Storage.Site.LoginURL {
@@ -57,23 +58,23 @@ func (c *AuthUtil) loginPost(w http.ResponseWriter, r *http.Request) (status int
 	mfa := r.FormValue("mfa")
 	remember := r.FormValue("remember")
 
-	allowedUsername := os.Getenv("SS_USERNAME")
+	allowedUsername := os.Getenv("PBB_USERNAME")
 	if len(allowedUsername) == 0 {
-		log.Println("Environment variable missing:", "SS_USERNAME")
+		log.Println("Environment variable missing:", "PBB_USERNAME")
 		http.Redirect(w, r, "/", http.StatusFound)
 		return
 	}
 
-	hash := os.Getenv("SS_PASSWORD_HASH")
+	hash := os.Getenv("PBB_PASSWORD_HASH")
 	if len(hash) == 0 {
-		log.Println("Environment variable missing:", "SS_PASSWORD_HASH")
+		log.Println("Environment variable missing:", "PBB_PASSWORD_HASH")
 		http.Redirect(w, r, "/", http.StatusFound)
 		return
 	}
 
 	// Get the MFA key - if the environment variable doesn't exist, then
 	// let the MFA pass.
-	mfakey := os.Getenv("SS_MFA_KEY")
+	mfakey := os.Getenv("PBB_MFA_KEY")
 	mfaSuccess := true
 	if len(mfakey) > 0 {
 		imfa := 0

@@ -25,5 +25,5 @@ func main() {
 
 	// Encode key in bytes to string for saving.
 	key := hex.EncodeToString(bytes)
-	fmt.Printf("SS_SESSION_KEY=%v\n", key)
+	fmt.Printf("PBB_SESSION_KEY=%v\n", key)
 }
