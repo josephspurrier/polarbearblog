@@ -131,7 +131,7 @@ When `SS_LOCAL` is set, the following things will happen:
 
 ### Custom Styles
 
-![Styles](doc/images/styles.png)
+![Styles](doc/images/site-styles.png)
 
 ### Edit a Post
 
