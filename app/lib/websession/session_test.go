@@ -46,7 +46,7 @@ func TestNewSession(t *testing.T) {
 
 		// Test Logout
 		sess.Logout(r)
-		user, found = sess.User(r)
+		_, found = sess.User(r)
 		assert.False(t, found)
 
 		// Test persistence
