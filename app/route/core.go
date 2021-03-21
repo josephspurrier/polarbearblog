@@ -2,15 +2,17 @@ package route
 
 import (
 	"fmt"
+	"io"
+	"io/fs"
 	"log"
 	"net/http"
-	"path/filepath"
 	"strings"
 
 	"github.com/josephspurrier/polarbearblog/app/lib/datastorage"
 	"github.com/josephspurrier/polarbearblog/app/lib/htmltemplate"
 	"github.com/josephspurrier/polarbearblog/app/lib/router"
 	"github.com/josephspurrier/polarbearblog/app/lib/websession"
+	"github.com/josephspurrier/polarbearblog/assets"
 )
 
 // Core -
@@ -78,14 +80,35 @@ func setupRouter(tmpl *htmltemplate.Engine) *router.Mux {
 	rr := router.New(customServeHTTP, notFound)
 
 	// Static assets.
-	folder := filepath.FromSlash("assets")
 	rr.Get("/assets...", func(w http.ResponseWriter, r *http.Request) (status int, err error) {
 		// Don't allow directory browsing.
 		if strings.HasSuffix(r.URL.Path, "/") {
 			return http.StatusNotFound, nil
 		}
 
-		http.ServeFile(w, r, filepath.Join(folder, strings.TrimPrefix(r.URL.Path, "/assets/")))
+		// Use the root directory.
+		fsys, err := fs.Sub(assets.CSS, ".")
+		if err != nil {
+			return http.StatusInternalServerError, err
+		}
+
+		// Get the requested file name.
+		fname := strings.TrimPrefix(r.URL.Path, "/assets/")
+
+		// Open the file.
+		f, err := fsys.Open(fname)
+		if err != nil {
+			return http.StatusNotFound, nil
+		}
+		defer f.Close()
+
+		// Get the file time.
+		st, err := f.Stat()
+		if err != nil {
+			return http.StatusInternalServerError, err
+		}
+
+		http.ServeContent(w, r, fname, st.ModTime(), f.(io.ReadSeeker))
 		return
 	})
 

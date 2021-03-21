@@ -1,6 +1,6 @@
 module github.com/josephspurrier/polarbearblog
 
-go 1.14
+go 1.16
 
 require (
 	cloud.google.com/go/storage v1.14.0

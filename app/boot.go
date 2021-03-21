@@ -15,6 +15,7 @@ import (
 	"github.com/josephspurrier/polarbearblog/app/middleware"
 	"github.com/josephspurrier/polarbearblog/app/model"
 	"github.com/josephspurrier/polarbearblog/app/route"
+	"github.com/josephspurrier/polarbearblog/html"
 )
 
 var (
@@ -94,7 +95,8 @@ func Boot() (http.Handler, error) {
 	sess := websession.New(sessionName, sessionManager)
 
 	// Set up the template engine.
-	tmpl := htmltemplate.New(storage, sess, allowHTML)
+	tm := html.NewTemplateManager(storage, sess)
+	tmpl := htmltemplate.New(tm, allowHTML)
 
 	// Setup the routes.
 	c, err := route.Register(storage, sess, tmpl)
