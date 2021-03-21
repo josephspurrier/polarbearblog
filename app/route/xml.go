@@ -26,7 +26,7 @@ func (c *XMLUtil) Robots(w http.ResponseWriter, r *http.Request) (status int, er
 	text :=
 		`User-agent: *
 Allow: /`
-	fmt.Fprintf(w, text)
+	fmt.Fprint(w, text)
 	return
 }
 
@@ -82,7 +82,7 @@ func (c *XMLUtil) sitemap(w http.ResponseWriter, r *http.Request) (status int, e
 	output = append(header[:], output[:]...)
 
 	w.Header().Set("Content-Type", "application/xml")
-	fmt.Fprintf(w, string(output))
+	fmt.Fprint(w, string(output))
 	return
 }
 
@@ -154,6 +154,6 @@ func (c *XMLUtil) rss(w http.ResponseWriter, r *http.Request) (status int, err e
 	output = append(header[:], output[:]...)
 
 	w.Header().Set("Content-Type", "application/xml")
-	fmt.Fprintf(w, string(output))
+	fmt.Fprint(w, string(output))
 	return
 }

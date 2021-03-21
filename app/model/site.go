@@ -92,7 +92,7 @@ func (s Site) PostsAndPages(onlyPublished bool) PostWithIDList {
 // Tags -
 func (s Site) Tags(onlyPublished bool) TagList {
 	// Get unique values.
-	m := make(map[string]Tag, 0)
+	m := make(map[string]Tag)
 	for _, v := range s.Posts {
 		if onlyPublished && !v.Published {
 			continue

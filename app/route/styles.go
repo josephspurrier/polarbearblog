@@ -50,13 +50,3 @@ func (c *Styles) update(w http.ResponseWriter, r *http.Request) (status int, err
 	http.Redirect(w, r, "/dashboard/styles", http.StatusFound)
 	return
 }
-
-func (c *Styles) reload(w http.ResponseWriter, r *http.Request) (status int, err error) {
-	err = c.Storage.Load()
-	if err != nil {
-		return http.StatusInternalServerError, err
-	}
-
-	http.Redirect(w, r, "/dashboard/styles", http.StatusFound)
-	return
-}
