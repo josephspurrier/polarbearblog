@@ -12,6 +12,10 @@
         <input type="checkbox" name="stackedit" id="id_stackedit" {{if .stackedit}}checked{{end}}>
     </p>
     <p>
+        <label for="id_prism">Enable <a href="https://prismjs.com/" target='_blank'>Prism</a> for codeblock highlighting:</label>
+        <input type="checkbox" name="prism" id="id_prism" {{if .prism}}checked{{end}}>
+    </p>
+    <p>
         <label for="id_stylesappend">Append instead of replace styles:</label>
         <input type="checkbox" name="stylesappend" id="id_stylesappend" {{if .stylesappend}}checked{{end}}>
     </p>

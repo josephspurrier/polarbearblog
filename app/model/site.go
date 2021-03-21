@@ -25,6 +25,7 @@ type Site struct {
 	Styles            string          `json:"styles"`
 	StylesAppend      bool            `json:"stylesappend"`
 	StackEdit         bool            `json:"stackedit"`
+	Prism             bool            `json:"prism"`
 	Posts             map[string]Post `json:"posts"`
 }
 
