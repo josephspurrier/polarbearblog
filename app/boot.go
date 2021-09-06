@@ -48,14 +48,14 @@ func Boot() (http.Handler, error) {
 		return nil, fmt.Errorf("environment variable missing: %v", "PBB_SESSION_KEY")
 	}
 
-	bucket := os.Getenv("PBB_GCP_BUCKET_NAME")
-	if len(bucket) == 0 {
-		return nil, fmt.Errorf("environment variable missing: %v", "PBB_GCP_BUCKET_NAME")
-	}
-
 	allowHTML, err := strconv.ParseBool(os.Getenv("PBB_ALLOW_HTML"))
 	if err != nil {
 		return nil, fmt.Errorf("environment variable not able to parse as bool: %v", "PBB_ALLOW_HTML")
+	}
+
+	cloudProvider := os.Getenv("PBB_CLOUD_PROVIDER")
+	if len(cloudProvider) == 0 {
+		return nil, fmt.Errorf("environment variable missing: %v", "PBB_CLOUD_PROVIDER")
 	}
 
 	// Create new store object with the defaults.
@@ -65,9 +65,30 @@ func Boot() (http.Handler, error) {
 	var ss websession.Sessionstorer
 
 	if !envdetect.RunningLocalDev() {
-		// Use Google when running in GCP.
-		ds = datastorage.NewGCPStorage(bucket, storageSitePath)
-		ss = datastorage.NewGCPStorage(bucket, storageSessionPath)
+		switch cloudProvider {
+		case "aws":
+			// Use AWS S3 when running in AWS.
+			bucket := os.Getenv("PBB_AWS_BUCKET_NAME")
+			if len(bucket) == 0 {
+				return nil, fmt.Errorf("environment variable missing: %v", "PBB_AWS_BUCKET_NAME")
+			}
+			region := os.Getenv("PBB_AWS_REGION")
+			if len(region) == 0 {
+				return nil, fmt.Errorf("environment variable missing: %v", "PBB_AWS_REGION")
+			}
+			ds = datastorage.NewS3Storage(bucket, storageSitePath, region)
+			ss = datastorage.NewS3Storage(bucket, storageSessionPath, region)
+		case "gcp":
+			// Use Google when running in GCP.
+			bucket := os.Getenv("PBB_GCP_BUCKET_NAME")
+			if len(bucket) == 0 {
+				return nil, fmt.Errorf("environment variable missing: %v", "PBB_GCP_BUCKET_NAME")
+			}
+			ds = datastorage.NewGCPStorage(bucket, storageSitePath)
+			ss = datastorage.NewGCPStorage(bucket, storageSessionPath)
+		default:
+			return nil, fmt.Errorf("unknown cloud provider: %v", cloudProvider)
+		}
 	} else {
 		// Use local filesytem when developing.
 		ds = datastorage.NewLocalStorage(storageSitePath)
