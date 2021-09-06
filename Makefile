@@ -19,6 +19,14 @@ default: gcp-push
 # Deploy application
 ################################################################################
 
+.PHONY: aws-init
+aws-init:
+	@echo Pushing the initial files to AWS S3
+	aws s3 mb s3://${PBB_AWS_BUCKET_NAME} --region ${PBB_AWS_REGION}
+	aws s3api put-bucket-versioning --bucket ${PBB_AWS_BUCKET_NAME} --versioning-configuration Status=Enabled
+	aws s3 cp storage/initial/site.json s3://${PBB_AWS_BUCKET_NAME}/storage/site.json
+	aws s3 cp storage/initial/session.bin s3://${PBB_AWS_BUCKET_NAME}/storage/session.bin
+
 .PHONY: gcp-init
 gcp-init:
 	@echo Pushing the initial files to Google Cloud Storage.
