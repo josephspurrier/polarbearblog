@@ -6,6 +6,7 @@ import (
 	"net/http"
 	"os"
 
+	"github.com/akrylysov/algnhsa"
 	"github.com/josephspurrier/polarbearblog/app"
 	"github.com/josephspurrier/polarbearblog/app/lib/timezone"
 )
@@ -28,7 +29,13 @@ func main() {
 	if port == "" {
 		port = "8080"
 	}
-
-	fmt.Println("Web server running on port:", port)
-	log.Fatalln(http.ListenAndServe(":"+port, handler))
+	// use lambda
+	lambdaEnabled := os.Getenv("PBB_AWS_LAMBDA_ENABLED")
+	if lambdaEnabled == "true" {
+		fmt.Println("Lambda server running on port")
+		algnhsa.ListenAndServe(handler, nil)
+	} else {
+		fmt.Println("Web server running on port:", port)
+		log.Fatalln(http.ListenAndServe(":"+port, handler))
+	}
 }

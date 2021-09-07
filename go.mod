@@ -4,6 +4,7 @@ go 1.16
 
 require (
 	cloud.google.com/go/storage v1.14.0
+	github.com/akrylysov/algnhsa v0.12.1
 	github.com/alexedwards/scs/v2 v2.4.0
 	github.com/aws/aws-sdk-go v1.40.37
 	github.com/dgryski/dgoogauth v0.0.0-20190221195224-5a805980a5f3
