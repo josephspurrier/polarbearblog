@@ -13,7 +13,7 @@ jobs:
     strategy:
       matrix:
         go-version: [1.16.x]
-        os: [ubuntu-latest, macos-latest, windows-latest]
+        os: [ubuntu-latest, macos-latest]
       # Don't cancel all jobs if one fails.
       fail-fast: false
     runs-on: ${{ matrix.os }}
@@ -34,6 +34,7 @@ jobs:
       run: go test -race -covermode atomic -coverprofile=covprofile ./...
 
   release:
+    needs: [unit-tests]
     runs-on: ubuntu-latest
     steps:
     # install Go.
