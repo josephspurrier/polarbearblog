@@ -1,0 +1,68 @@
+# Run this workflow every time a new commit or PR pushed to the repository.
+on:
+  push:
+    tags:
+      - '*'
+# Name of the workflow. If this is blank, it will default to the path of the
+# file.
+name: release
+jobs:
+  # Name of the job.
+  unit-tests:
+    # run the job on these Go versions and operating systems.
+    strategy:
+      matrix:
+        go-version: [1.16.x]
+        os: [ubuntu-latest, macos-latest, windows-latest]
+      # Don't cancel all jobs if one fails.
+      fail-fast: false
+    runs-on: ${{ matrix.os }}
+    steps:
+
+    # install go.
+    - name: Install Go
+      uses: actions/setup-go@v2
+      with:
+        go-version: ${{ matrix.go-version }}
+
+    # checkout the code.
+    - name: Checkout code
+      uses: actions/checkout@v2
+
+    # run all the unit tests.
+    - name: Run all unit tests
+      run: go test -race -covermode atomic -coverprofile=covprofile ./...
+
+  release:
+    runs-on: ubuntu-latest
+    steps:
+    # install Go.
+    - name: Install Go
+      uses: actions/setup-go@v2
+      with:
+        go-version: 1.16.x
+
+    # checkout the code.
+    - name: Checkout code
+      uses: actions/checkout@v2
+
+    # get tag
+    - name: Get the tag name
+      run: echo "GIT_TAG=${GITHUB_REF/refs\/tags\//}" >> $GITHUB_ENV
+
+    # configure aws
+    - name: Configure AWS credentials
+      uses: aws-actions/configure-aws-credentials@v1
+      with:
+        aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        aws-region: us-east-1 # only us-east-1 for ecr-public
+
+    # build and push
+    - name: Build and Push to ECR public
+      id: build-and-push
+      uses: pahud/ecr-public-action@8cd826db40befb59b0cd0b60b22a7ba72d06a7f7
+      with:
+        tags: |
+          public.ecr.aws/g5o6g6l0/polarbearblog:latest
+          public.ecr.aws/g5o6g6l0/polarbearblog:${{ env.GIT_TAG }}
