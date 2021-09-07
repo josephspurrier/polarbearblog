@@ -1,17 +1,17 @@
 # Polar Bear Blog 🐻‍❄️
 
-[![Go Report Card](https://goreportcard.com/badge/github.com/josephspurrier/polarbearblog)](https://goreportcard.com/report/github.com/josephspurrier/polarbearblog)
-[![GoDoc](https://godoc.org/github.com/josephspurrier/polarbearblog?status.svg)](https://godoc.org/github.com/josephspurrier/polarbearblog) 
-[![GitHub Actions status](https://github.com/josephspurrier/polarbearblog/actions/workflows/unit-tests.yml/badge.svg)](https://github.com/josephspurrier/polarbearblog/actions)
-[![Coverage Status](https://coveralls.io/repos/github/josephspurrier/polarbearblog/badge.svg?branch=main)](https://coveralls.io/github/josephspurrier/polarbearblog?branch=main)
+[![Go Report Card](https://goreportcard.com/badge/github.com/crhuber/polarbearblog)](https://goreportcard.com/report/github.com/crhuber/polarbearblog)
+[![GoDoc](https://godoc.org/github.com/crhuber/polarbearblog?status.svg)](https://godoc.org/github.com/crhuber/polarbearblog) 
+[![GitHub Actions status](https://github.com/crhuber/polarbearblog/actions/workflows/unit-tests.yml/badge.svg)](https://github.com/josephspurrier/polarbearblog/actions)
 
-Lightweight blogging system for a single author. Written in Go and deploys to your own GCP project with a few commands. It's a derivative of the beautifully simple [Bear Blog 🐻](https://bearblog.dev/). The data storage and session storage are stored in Google Cloud Storage as objects. Depending on the traffic and blog size, it should (not guaranteed) cost less than $1 USD per month (compute and storage) to host this blog because it will be deployed to [Google Cloud Run](https://cloud.google.com/run/pricing) which bills to the nearest 100 millisecond. You can also [map your own domain name](https://cloud.google.com/run/docs/mapping-custom-domains) and Google will provide a free SSL certificate. This project uses `make` to simplify the deployment process.
+
+Lightweight blogging system for a single author. Written in Go and deploys to your own GCP or AWS project with a few commands. It's a derivative of the beautifully simple [Bear Blog 🐻](https://bearblog.dev/). The data storage and session storage are stored in Google Cloud Storage or AWS S3 as objects. Depending on the traffic and blog size, it should (not guaranteed) cost less than $1 USD per month (compute and storage) to host this blog because it will be deployed to [Google Cloud Run](https://cloud.google.com/run/pricing) or [AWS Lambda](https://aws.amazon.com/lambda/) which bills to the nearest 100 millisecond. You can also [map your own domain name](https://cloud.google.com/run/docs/mapping-custom-domains) and Google will provide a free SSL certificate. This project uses `make` to simplify the deployment process.
 
 You can see an active website using this stack [here](https://www.josephspurrier.com/). You can read the blog post on this project [here](https://www.josephspurrier.com/polar-bear-blog).
 
 ## Quickstart on Local
 
-- Clone the repository: `git@github.com:josephspurrier/polarbearblog.git`
+- Clone the repository: `git@github.com:crhuber/polarbearblog.git`
 - Create a new file called `.env` in the root of the repository with this content:
 
 ```bash
@@ -42,6 +42,16 @@ PBB_GCP_CLOUDRUN_NAME=sample-service
 ## Region (not zone) where the Cloud Run service will be created:
 ## https://cloud.google.com/compute/docs/regions-zones#available
 PBB_GCP_REGION=us-central1
+
+# AWS Deployment
+## Set to aws to use AWS S3 for storage.
+PBB_CLOUD_PROVIDER=aws
+## Name of the S3 bucket to use for storage.
+PBB_AWS_BUCKET_NAME=bear.intra.io
+## AWS region.
+PBB_AWS_REGION=us-west-2
+## Enable use of AWS lambda.
+PBB_AWS_LAMBDA_ENABLED=true
 
 # MFA Configuration
 ## Friendly identifier when you generate the MFA string.
@@ -77,6 +87,10 @@ By following these instructions, you can get a blog public easily:
 - Run this command to build the docker image, push to the Google repository, and then create a Cloud Run job: `make`.
 
 Once the process completes in a few minutes, you should get a URL to access the website. The login page is located at (replace with your real URL): https://example.run.app/login/admin.
+
+## Quickstart on AWS
+
+TBD
 
 ## Development
 
