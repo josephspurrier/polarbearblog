@@ -44,7 +44,6 @@ func NewS3Storage(bucket string, object string, region string) *S3Storage {
 // be read.
 func (s *S3Storage) Load() ([]byte, error) {
 	// Create an AWS session
-	fmt.Println(s.region)
 	sess, err := session.NewSession(&aws.Config{
 		Region: aws.String(s.region)},
 	)
