@@ -70,7 +70,7 @@ jobs:
 
     # build and push lambda image
     - name: Build and Push to ECR public lambda
-      id: build-and-push
+      id: build-and-push-lamba
       uses: pahud/ecr-public-action@8cd826db40befb59b0cd0b60b22a7ba72d06a7f7
       with:
         dockerfile: Dockerfile-lambda
