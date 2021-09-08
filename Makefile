@@ -51,6 +51,18 @@ gcp-push:
 		--update-env-vars PBB_GCP_BUCKET_NAME=${PBB_GCP_BUCKET_NAME} \
 		--update-env-vars PBB_ALLOW_HTML=${PBB_ALLOW_HTML}
 
+.PHONY: kube-push
+kube-push:
+	@echo Pushing to Kubernetes.
+	helm install polarbearblog ./deployment/helm/polarbearblog -f ./deployment/helm/polarbearblog/values.yaml \
+		--set env.PBB_AWS_REGION=${PBB_AWS_REGION} \
+		--set env.PBB_USERNAME=${PBB_USERNAME} \
+		--set env.PBB_AWS_BUCKET_NAME=${PBB_AWS_BUCKET_NAME} \
+		--set env.PBB_ALLOW_HTML=${PBB_ALLOW_HTML} \
+		--set env.PBB_CLOUD_PROVIDER=${PBB_CLOUD_PROVIDER}
+		--set secrets.PBB_SESSION_KEY=${PBB_SESSION_KEY} \
+		--set secrets.PBB_PASSWORD_HASH=${PBB_PASSWORD_HASH}
+
 .PHONY: privatekey
 privatekey:
 	@echo Generating private key for encrypting sessions.
