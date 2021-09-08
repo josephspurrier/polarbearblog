@@ -1,7 +1,7 @@
 # Polar Bear Blog 🐻‍❄️
 
 [![Go Report Card](https://goreportcard.com/badge/github.com/crhuber/polarbearblog)](https://goreportcard.com/report/github.com/crhuber/polarbearblog)
-[![GoDoc](https://godoc.org/github.com/crhuber/polarbearblog?status.svg)](https://godoc.org/github.com/crhuber/polarbearblog) 
+[![GoDoc](https://godoc.org/github.com/crhuber/polarbearblog?status.svg)](https://godoc.org/github.com/crhuber/polarbearblog)
 [![GitHub Actions status](https://github.com/crhuber/polarbearblog/actions/workflows/unit-tests.yml/badge.svg)](https://github.com/josephspurrier/polarbearblog/actions)
 
 
@@ -88,9 +88,49 @@ By following these instructions, you can get a blog public easily:
 
 Once the process completes in a few minutes, you should get a URL to access the website. The login page is located at (replace with your real URL): https://example.run.app/login/admin.
 
-## Quickstart on AWS
+## Quickstart on AWS S3 Storage
 
-TBD
+By following these instructions, you can get a blog public easily:
+
+- Create an AWS user with the following IAM permissions
+
+```json
+{
+    "Version": "2012-10-17",
+    "Statement": [
+        {
+            "Sid": "VisualEditor0",
+            "Effect": "Allow",
+            "Action": [
+                "s3:PutObject",
+                "s3:GetObjectAcl",
+                "s3:GetObject",
+                "s3:ListBucket",
+                "s3:GetObjectVersion"
+            ],
+            "Resource": ["arn:aws:s3:::my-bucket", "arn:aws:s3:::my-bucket/*" ]
+        }
+    ]
+}
+
+```
+
+- Update the .env file with:
+
+```
+PBB_AWS_BUCKET_NAME=my-bucket
+PBB_AWS_REGION=us-west-2
+PBB_CLOUD_PROVIDER=aws
+AWS_ACCESS_KEY_ID=XYXYX
+AWS_SECRET_ACCESS_KEY=XYXYX
+```
+
+## Quickstart on Kubernetes
+
+By following these instructions, you can get a blog public easily:
+
+- Run `make kube-init`
+
 
 ## Development
 
@@ -100,7 +140,7 @@ If you would like to make changes to the code, I recommend these tools to help s
 # Install air to allow hot reloading so you can make changes quickly.
 curl -sSfL https://raw.githubusercontent.com/cosmtrek/air/master/install.sh | sh -s
 
-# Install direnv and hook into your shell. This allows you to manage 
+# Install direnv and hook into your shell. This allows you to manage
 # https://direnv.net/docs/installation.html
 ```
 

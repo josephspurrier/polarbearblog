@@ -8,6 +8,9 @@
 # * make passhash passwordhere
 # * make local-init
 # * make local-run
+# * make kube-init
+# * make kube-push
+# * make s3-init
 
 # Load the environment variables.
 include .env
@@ -19,7 +22,7 @@ default: gcp-push
 # Deploy application
 ################################################################################
 
-.PHONY: aws-init
+.PHONY: s3-init
 aws-init:
 	@echo Pushing the initial files to AWS S3
 	aws s3 mb s3://${PBB_AWS_BUCKET_NAME} --region ${PBB_AWS_REGION}
@@ -51,17 +54,35 @@ gcp-push:
 		--update-env-vars PBB_GCP_BUCKET_NAME=${PBB_GCP_BUCKET_NAME} \
 		--update-env-vars PBB_ALLOW_HTML=${PBB_ALLOW_HTML}
 
-.PHONY: kube-push
-kube-push:
-	@echo Pushing to Kubernetes.
-	helm install polarbearblog ./deployment/helm/polarbearblog -f ./deployment/helm/polarbearblog/values.yaml \
+.PHONY: kube-init
+kube-init:
+	@echo Installing to Kubernetes.
+	helm install polarbearblog ./deployment/helm/polarbearblog \
+	    -f ./deployment/helm/polarbearblog/values.yaml \
 		--set env.PBB_AWS_REGION=${PBB_AWS_REGION} \
 		--set env.PBB_USERNAME=${PBB_USERNAME} \
 		--set env.PBB_AWS_BUCKET_NAME=${PBB_AWS_BUCKET_NAME} \
 		--set env.PBB_ALLOW_HTML=${PBB_ALLOW_HTML} \
-		--set env.PBB_CLOUD_PROVIDER=${PBB_CLOUD_PROVIDER}
+		--set env.PBB_CLOUD_PROVIDER=${PBB_CLOUD_PROVIDER} \
 		--set secrets.PBB_SESSION_KEY=${PBB_SESSION_KEY} \
-		--set secrets.PBB_PASSWORD_HASH=${PBB_PASSWORD_HASH}
+		--set secrets.PBB_PASSWORD_HASH=${PBB_PASSWORD_HASH} \
+		--set secrets.AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID} \
+		--set secrets.AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}
+
+.PHONY: kube-push
+kube-push:
+	@echo Pushing to Kubernetes.
+	helm upgrade polarbearblog ./deployment/helm/polarbearblog \
+	    -f ./deployment/helm/polarbearblog/values.yaml \
+		--set env.PBB_AWS_REGION=${PBB_AWS_REGION} \
+		--set env.PBB_USERNAME=${PBB_USERNAME} \
+		--set env.PBB_AWS_BUCKET_NAME=${PBB_AWS_BUCKET_NAME} \
+		--set env.PBB_ALLOW_HTML=${PBB_ALLOW_HTML} \
+		--set env.PBB_CLOUD_PROVIDER=${PBB_CLOUD_PROVIDER} \
+		--set env.PBB_SESSION_KEY=${PBB_SESSION_KEY} \
+		--set env.PBB_PASSWORD_HASH=${PBB_PASSWORD_HASH} \
+		--set env.AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID} \
+		--set env.AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}
 
 .PHONY: privatekey
 privatekey:

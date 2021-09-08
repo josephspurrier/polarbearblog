@@ -6,12 +6,22 @@ import (
 	"io/ioutil"
 	"log"
 	"os"
+	"path"
 
 	"github.com/aws/aws-sdk-go/aws"
 	"github.com/aws/aws-sdk-go/aws/session"
 	"github.com/aws/aws-sdk-go/service/s3"
 	"github.com/aws/aws-sdk-go/service/s3/s3manager"
 )
+
+func EnsureBaseDir(fpath string) error {
+	baseDir := path.Dir(fpath)
+	info, err := os.Stat(baseDir)
+	if err == nil && info.IsDir() {
+		return nil
+	}
+	return os.MkdirAll(baseDir, 0755)
+}
 
 // GCPStorage represents a S3 Storage object.
 type S3Storage struct {
@@ -34,14 +44,25 @@ func NewS3Storage(bucket string, object string, region string) *S3Storage {
 // be read.
 func (s *S3Storage) Load() ([]byte, error) {
 	// Create an AWS session
-	sess, _ := session.NewSession(&aws.Config{
+	fmt.Println(s.region)
+	sess, err := session.NewSession(&aws.Config{
 		Region: aws.String(s.region)},
 	)
-	// Create a new AWS S3 downloader
+	// Log any session errors
+	if err != nil {
+		log.Fatalf("Unable to create a new s3 session: %v", err)
+		return nil, err
+	}
+	// create a new AWS S3 downloader
 	downloader := s3manager.NewDownloader(sess)
 
 	// Download the item from the bucket. If an error occurs, log it and exit. Otherwise, notify the user that the download succeeded.
+	EnsureBaseDir(s.object)
 	file, err := os.Create(s.object)
+	if err != nil {
+		log.Fatalf("Unable to create file. %v", err)
+		return nil, err
+	}
 	numBytes, err := downloader.Download(file,
 		&s3.GetObjectInput{
 			Bucket: aws.String(s.bucket),
