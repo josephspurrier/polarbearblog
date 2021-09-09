@@ -23,12 +23,6 @@ func (c *Handler) Redirect(next http.Handler) http.Handler {
 			return
 		}
 
-		// Strip trailing slash.
-		if r.URL.Path != "/" && strings.HasSuffix(r.URL.Path, "/") {
-			http.Redirect(w, r, strings.TrimRight(r.URL.Path, "/"), http.StatusPermanentRedirect)
-			return
-		}
-
 		next.ServeHTTP(w, r)
 	})
 }
