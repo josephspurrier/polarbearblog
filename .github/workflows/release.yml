@@ -68,12 +68,22 @@ jobs:
           public.ecr.aws/g5o6g6l0/polarbearblog:latest
           public.ecr.aws/g5o6g6l0/polarbearblog:${{ env.GIT_TAG }}
 
-    # build and push lambda image
-    - name: Build and Push to ECR public lambda
-      id: build-and-push-lamba
-      uses: pahud/ecr-public-action@8cd826db40befb59b0cd0b60b22a7ba72d06a7f7
+    - name: Configure AWS credentials
+      uses: aws-actions/configure-aws-credentials@v1
       with:
-        dockerfile: Dockerfile-lambda
-        tags: |
-          public.ecr.aws/g5o6g6l0/polarbearblog-lambda:latest
-          public.ecr.aws/g5o6g6l0/polarbearblog-lambda:${{ env.GIT_TAG }}
+        aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        aws-region: us-west-2
+
+    - name: Login to Amazon ECR
+      id: login-ecr
+      uses: aws-actions/amazon-ecr-login@v1
+
+    - name: Build, tag, and push image to Amazon ECR
+      env:
+        ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
+        ECR_REPOSITORY: polarbearblog-lambda
+        IMAGE_TAG: ${{ env.GIT_TAG }}
+      run: |
+        docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG .
+        docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
