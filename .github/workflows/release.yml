@@ -82,7 +82,7 @@ jobs:
     - name: Build, tag, and push image to Amazon ECR
       env:
         ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
-        ECR_REPOSITORY: polarbearblog-lambda
+        ECR_REPOSITORY: crhuber/polarbearblog-lambda
         IMAGE_TAG: ${{ env.GIT_TAG }}
       run: |
         docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG .
