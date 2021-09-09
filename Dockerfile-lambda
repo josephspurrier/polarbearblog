@@ -1,14 +1,23 @@
-FROM public.ecr.aws/lambda/provided:al2 as build
-# install compiler
-RUN yum install -y golang
-RUN go env -w GOPROXY=direct
+FROM golang:1.16-buster as builder
+
+# Create and change to the app directory.
+WORKDIR /app
+
 # cache dependencies
-ADD go.mod go.sum ./
+COPY go.mod go.sum ./
 RUN go mod download
-# build
-ADD . .
-RUN go build -o /main
+
+# Copy local code to the container image.
+COPY . ./
+
+# Build the binary.
+RUN go build -mod=readonly -v -o server
 # copy artifacts to a clean image
 FROM public.ecr.aws/lambda/provided:al2
-COPY --from=build /main /main
-ENTRYPOINT [ "/main" ]
+COPY --from=builder /app/server /app/server
+
+# Create and change to the app directory.
+WORKDIR /app
+
+# Run the web service on container startup.
+CMD ["/app/server"]
