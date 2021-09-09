@@ -67,23 +67,3 @@ jobs:
         tags: |
           public.ecr.aws/g5o6g6l0/polarbearblog:latest
           public.ecr.aws/g5o6g6l0/polarbearblog:${{ env.GIT_TAG }}
-
-    - name: Configure AWS credentials
-      uses: aws-actions/configure-aws-credentials@v1
-      with:
-        aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-        aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-        aws-region: us-west-2
-
-    - name: Login to Amazon ECR
-      id: login-ecr
-      uses: aws-actions/amazon-ecr-login@v1
-
-    - name: Build, tag, and push image to Amazon ECR lambda
-      env:
-        ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
-        ECR_REPOSITORY: crhuber/polarbearblog-lambda
-        IMAGE_TAG: ${{ env.GIT_TAG }}
-      run: |
-        docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG . -f Dockerfile-lambda
-        docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
