@@ -32,7 +32,8 @@ func main() {
 	// use lambda
 	if os.Getenv("AWS_LAMBDA_RUNTIME_API") != "" {
 		fmt.Println("Lambda server running")
-		algnhsa.ListenAndServe(handler, nil)
+		opts := &algnhsa.Options{UseProxyPath: true}
+		algnhsa.ListenAndServe(handler, opts)
 	} else {
 		fmt.Println("Web server running on port:", port)
 		log.Fatalln(http.ListenAndServe(":"+port, handler))

@@ -84,6 +84,24 @@ kube-push:
 		--set env.AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID} \
 		--set env.AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}
 
+.PHONY: lambda-init
+lambda-init:
+	@echo Pushing the initial files to AWS Lambda.
+	GOOS=linux CGO_ENABLED=0 GOARCH=amd64 go build main.go -o server
+	zip function.zip server
+	aws lambda create-function --function-name polarbearblog \
+		--runtime go1.x \
+		--role arn:aws:iam::${PBB_AWS_ACCOUNT_ID}:role/lambda_basic_execution \
+		--handler main \
+		--zip-file fileb://function.zip \
+		--timeout 300 \
+		--memory-size 128
+			
+.PHONY: lambda-push
+lambda-push:
+	@echo Pushing to AWS Lambda.
+	aws lambda update-function-code --function-name polarbearblog --zip-file fileb://function.zip
+
 .PHONY: privatekey
 privatekey:
 	@echo Generating private key for encrypting sessions.
