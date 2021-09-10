@@ -27,8 +27,8 @@ aws-init:
 	@echo Pushing the initial files to AWS S3
 	aws s3 mb s3://${PBB_AWS_BUCKET_NAME} --region ${PBB_AWS_REGION}
 	aws s3api put-bucket-versioning --bucket ${PBB_AWS_BUCKET_NAME} --versioning-configuration Status=Enabled
-	aws s3 cp storage/initial/site.json s3://${PBB_AWS_BUCKET_NAME}/storage/site.json
-	aws s3 cp storage/initial/session.bin s3://${PBB_AWS_BUCKET_NAME}/storage/session.bin
+	aws s3 cp storage/site.json s3://${PBB_AWS_BUCKET_NAME}/storage/site.json
+	aws s3 cp storage/session.bin s3://${PBB_AWS_BUCKET_NAME}/storage/session.bin
 
 .PHONY: gcp-init
 gcp-init:
@@ -87,8 +87,8 @@ kube-push:
 .PHONY: lambda-init
 lambda-init:
 	@echo Pushing the initial files to AWS Lambda.
-	GOOS=linux CGO_ENABLED=0 GOARCH=amd64 go build main.go -o server
-	zip function.zip server
+	GOOS=linux CGO_ENABLED=0 GOARCH=amd64 go build main.go
+	zip function.zip main
 	aws lambda create-function --function-name polarbearblog \
 		--runtime go1.x \
 		--role arn:aws:iam::${PBB_AWS_ACCOUNT_ID}:role/lambda_basic_execution \
