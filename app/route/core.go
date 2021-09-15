@@ -47,6 +47,7 @@ func Register(storage *datastorage.Storage, sess *websession.Session, tmpl *html
 func setupRouter(tmpl *htmltemplate.Engine) *router.Mux {
 	// Set the handling of all responses.
 	customServeHTTP := func(w http.ResponseWriter, r *http.Request, status int, err error) {
+		r.Header.Set("Content-Type", "text/html; charset=utf-8")
 		// Handle only errors.
 		if status >= 400 {
 			vars := make(map[string]interface{})

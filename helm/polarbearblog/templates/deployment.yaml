@@ -1,0 +1,86 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "polarbearblog.fullname" . }}
+  labels:
+    {{- include "polarbearblog.labels" . | nindent 4 }}
+spec:
+  {{- if not .Values.autoscaling.enabled }}
+  replicas: {{ .Values.replicaCount }}
+  {{- end }}
+  selector:
+    matchLabels:
+      {{- include "polarbearblog.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      {{- with .Values.podAnnotations }}
+      annotations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      labels:
+        {{- include "polarbearblog.selectorLabels" . | nindent 8 }}
+    spec:
+      {{- with .Values.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      serviceAccountName: {{ include "polarbearblog.serviceAccountName" . }}
+      securityContext:
+        {{- toYaml .Values.podSecurityContext | nindent 8 }}
+      containers:
+        - name: {{ .Chart.Name }}
+          securityContext:
+            {{- toYaml .Values.securityContext | nindent 12 }}
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          ports:
+            - name: http
+              containerPort: 8080
+              protocol: TCP
+          livenessProbe:
+            httpGet:
+              path: /
+              port: http
+          readinessProbe:
+            httpGet:
+              path: /
+              port: http
+          resources:
+            {{- toYaml .Values.resources | nindent 12 }}
+          env:
+          {{- range $envName, $envValue := .Values.env }}
+          - name: {{ $envName }}
+            {{- if eq (printf "%T" $envValue) "map[string]interface {}" }}
+            valueFrom:
+              {{ $envValue.type }}:
+                {{- if $envValue.prefixFullName }}
+                name: {{ template "polarbearblog.fullname" $ }}{{ $envValue.name }}
+                {{- else }}
+                name: {{ $envValue.name }}
+                {{- end }}
+                key: {{ $envValue.key }}
+            {{- else }}
+            value: {{ $envValue | quote }}
+            {{- end }}
+          {{- end }}
+          envFrom:
+          {{- if $.Values.configMap }}
+            - configMapRef:
+                name: {{ template "polarbearblog.fullname" $ }}
+          {{- end }}
+          {{- if $.Values.secrets }}
+            - secretRef:
+                name: {{ template "polarbearblog.fullname" $ }}
+          {{- end }}
+      {{- with .Values.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.affinity }}
+      affinity:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}

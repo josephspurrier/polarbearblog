@@ -24,6 +24,7 @@ func registerAdminPost(c *AdminPost) {
 }
 
 func (c *AdminPost) index(w http.ResponseWriter, r *http.Request) (status int, err error) {
+	r.Header.Set("Content-Type", "text/html; charset=utf-8")
 	vars := make(map[string]interface{})
 	vars["title"] = "Posts"
 	vars["posts"] = c.Storage.Site.PostsAndPages(false)
@@ -32,6 +33,7 @@ func (c *AdminPost) index(w http.ResponseWriter, r *http.Request) (status int, e
 }
 
 func (c *AdminPost) create(w http.ResponseWriter, r *http.Request) (status int, err error) {
+	r.Header.Set("Content-Type", "text/html; charset=utf-8")
 	vars := make(map[string]interface{})
 	vars["title"] = "New post"
 	vars["token"] = c.Sess.SetCSRF(r)
@@ -40,6 +42,7 @@ func (c *AdminPost) create(w http.ResponseWriter, r *http.Request) (status int, 
 }
 
 func (c *AdminPost) store(w http.ResponseWriter, r *http.Request) (status int, err error) {
+	r.Header.Set("Content-Type", "text/html; charset=utf-8")
 	ID, err := uuid.Generate()
 	if err != nil {
 		return http.StatusInternalServerError, err
@@ -87,6 +90,7 @@ func (c *AdminPost) store(w http.ResponseWriter, r *http.Request) (status int, e
 }
 
 func (c *AdminPost) edit(w http.ResponseWriter, r *http.Request) (status int, err error) {
+	r.Header.Set("Content-Type", "text/html; charset=utf-8")
 	vars := make(map[string]interface{})
 	vars["title"] = "Edit post"
 	vars["token"] = c.Sess.SetCSRF(r)
@@ -113,6 +117,7 @@ func (c *AdminPost) edit(w http.ResponseWriter, r *http.Request) (status int, er
 }
 
 func (c *AdminPost) update(w http.ResponseWriter, r *http.Request) (status int, err error) {
+	r.Header.Set("Content-Type", "text/html; charset=utf-8")
 	ID := way.Param(r.Context(), "id")
 
 	var p model.Post
@@ -159,6 +164,7 @@ func (c *AdminPost) update(w http.ResponseWriter, r *http.Request) (status int, 
 }
 
 func (c *AdminPost) destroy(w http.ResponseWriter, r *http.Request) (status int, err error) {
+	r.Header.Set("Content-Type", "text/html; charset=utf-8")
 	ID := way.Param(r.Context(), "id")
 
 	var ok bool

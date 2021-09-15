@@ -20,6 +20,7 @@ func registerHomePost(c *HomePost) {
 }
 
 func (c *HomePost) show(w http.ResponseWriter, r *http.Request) (status int, err error) {
+	r.Header.Set("Content-Type", "text/html; charset=utf-8")
 	p := model.Post{
 		Content: c.Storage.Site.Content,
 		URL:     "/",
@@ -34,6 +35,7 @@ func (c *HomePost) show(w http.ResponseWriter, r *http.Request) (status int, err
 }
 
 func (c *HomePost) edit(w http.ResponseWriter, r *http.Request) (status int, err error) {
+	r.Header.Set("Content-Type", "text/html; charset=utf-8")
 	vars := make(map[string]interface{})
 	vars["title"] = "Edit site"
 	vars["homeContent"] = c.Storage.Site.Content
@@ -60,6 +62,7 @@ func (c *HomePost) edit(w http.ResponseWriter, r *http.Request) (status int, err
 }
 
 func (c *HomePost) update(w http.ResponseWriter, r *http.Request) (status int, err error) {
+	r.Header.Set("Content-Type", "text/html; charset=utf-8")
 	r.ParseForm()
 
 	// CSRF protection.
@@ -91,6 +94,7 @@ func (c *HomePost) update(w http.ResponseWriter, r *http.Request) (status int, e
 }
 
 func (c *HomePost) reload(w http.ResponseWriter, r *http.Request) (status int, err error) {
+	r.Header.Set("Content-Type", "text/html; charset=utf-8")
 	err = c.Storage.Load()
 	if err != nil {
 		return http.StatusInternalServerError, err

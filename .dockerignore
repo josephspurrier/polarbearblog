@@ -11,3 +11,7 @@ vendor/
 
 # Exclude git history and configuration.
 .gitignore
+
+# Exclude .env files
+.env
+.envrc
