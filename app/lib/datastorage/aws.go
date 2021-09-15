@@ -56,12 +56,15 @@ func (s *S3Storage) Load() ([]byte, error) {
 	downloader := s3manager.NewDownloader(sess)
 
 	// Download the item from the bucket. If an error occurs, log it and exit. Otherwise, notify the user that the download succeeded.
-	EnsureBaseDir(s.object)
-	file, err := os.Create(s.object)
+	EnsureBaseDir("/tmp/" + s.object)
+	file, err := os.Create("/tmp/" + s.object)
 	if err != nil {
 		log.Fatalf("Unable to create file. %v", err)
 		return nil, err
 	}
+
+	defer file.Close()
+
 	numBytes, err := downloader.Download(file,
 		&s3.GetObjectInput{
 			Bucket: aws.String(s.bucket),

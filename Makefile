@@ -23,12 +23,12 @@ default: gcp-push
 ################################################################################
 
 .PHONY: s3-init
-aws-init:
+s3-init:
 	@echo Pushing the initial files to AWS S3
 	aws s3 mb s3://${PBB_AWS_BUCKET_NAME} --region ${PBB_AWS_REGION}
 	aws s3api put-bucket-versioning --bucket ${PBB_AWS_BUCKET_NAME} --versioning-configuration Status=Enabled
-	aws s3 cp storage/initial/site.json s3://${PBB_AWS_BUCKET_NAME}/storage/site.json
-	aws s3 cp storage/initial/session.bin s3://${PBB_AWS_BUCKET_NAME}/storage/session.bin
+	aws s3 cp storage/site.json s3://${PBB_AWS_BUCKET_NAME}/storage/site.json
+	aws s3 cp storage/session.bin s3://${PBB_AWS_BUCKET_NAME}/storage/session.bin
 
 .PHONY: gcp-init
 gcp-init:
@@ -83,6 +83,28 @@ kube-push:
 		--set env.PBB_PASSWORD_HASH=${PBB_PASSWORD_HASH} \
 		--set env.AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID} \
 		--set env.AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}
+
+.PHONY: lambda-init
+lambda-init:
+	@echo Pushing the initial files to AWS Lambda.
+	GOOS=linux CGO_ENABLED=0 GOARCH=amd64 go build main.go
+	zip function.zip main
+	aws lambda create-function --function-name polarbearblog \
+		--runtime go1.x \
+		--role arn:aws:iam::${PBB_AWS_ACCOUNT_ID}:role/lambda_basic_execution \
+		--handler main \
+		--zip-file fileb://function.zip \
+		--timeout 300 \
+		--memory-size 128
+			
+.PHONY: lambda-push
+lambda-push:
+	@echo Pushing to AWS Lambda.
+	GOOS=linux CGO_ENABLED=0 GOARCH=amd64 go build main.go
+	mv main ./bin/main
+	rm ./bin/function.zip
+	zip ./bin/function.zip ./bin/main
+	aws lambda update-function-code --function-name polarbearblog --zip-file fileb://bin/function.zip
 
 .PHONY: privatekey
 privatekey:

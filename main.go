@@ -30,10 +30,10 @@ func main() {
 		port = "8080"
 	}
 	// use lambda
-	lambdaEnabled := os.Getenv("PBB_AWS_LAMBDA_ENABLED")
-	if lambdaEnabled == "true" {
-		fmt.Println("Lambda server running on port")
-		algnhsa.ListenAndServe(handler, nil)
+	if os.Getenv("AWS_LAMBDA_FUNCTION_NAME") != "" {
+		fmt.Println("Lambda server running")
+		opts := &algnhsa.Options{UseProxyPath: true}
+		algnhsa.ListenAndServe(handler, opts)
 	} else {
 		fmt.Println("Web server running on port:", port)
 		log.Fatalln(http.ListenAndServe(":"+port, handler))
