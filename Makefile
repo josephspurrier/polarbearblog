@@ -23,7 +23,7 @@ default: gcp-push
 ################################################################################
 
 .PHONY: s3-init
-aws-init:
+s3-init:
 	@echo Pushing the initial files to AWS S3
 	aws s3 mb s3://${PBB_AWS_BUCKET_NAME} --region ${PBB_AWS_REGION}
 	aws s3api put-bucket-versioning --bucket ${PBB_AWS_BUCKET_NAME} --versioning-configuration Status=Enabled
@@ -100,7 +100,11 @@ lambda-init:
 .PHONY: lambda-push
 lambda-push:
 	@echo Pushing to AWS Lambda.
-	aws lambda update-function-code --function-name polarbearblog --zip-file fileb://function.zip
+	GOOS=linux CGO_ENABLED=0 GOARCH=amd64 go build main.go
+	mv main ./bin/main
+	rm ./bin/function.zip
+	zip ./bin/function.zip ./bin/main
+	aws lambda update-function-code --function-name polarbearblog --zip-file fileb://bin/function.zip
 
 .PHONY: privatekey
 privatekey:

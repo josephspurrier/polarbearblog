@@ -19,4 +19,4 @@
 /bin
 .env*
 .zip
-server
+main
