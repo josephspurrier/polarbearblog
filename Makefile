@@ -57,8 +57,8 @@ gcp-push:
 .PHONY: kube-init
 kube-init:
 	@echo Installing to Kubernetes.
-	helm install polarbearblog ./deployment/helm/polarbearblog \
-	    -f ./deployment/helm/polarbearblog/values.yaml \
+	helm install polarbearblog ./helm/polarbearblog \
+	    -f ./helm/polarbearblog/values.yaml \
 		--set env.PBB_AWS_REGION=${PBB_AWS_REGION} \
 		--set env.PBB_USERNAME=${PBB_USERNAME} \
 		--set env.PBB_AWS_BUCKET_NAME=${PBB_AWS_BUCKET_NAME} \
@@ -73,7 +73,7 @@ kube-init:
 kube-push:
 	@echo Pushing to Kubernetes.
 	helm upgrade polarbearblog ./deployment/helm/polarbearblog \
-	    -f ./deployment/helm/polarbearblog/values.yaml \
+	    -f ./helm/polarbearblog/values.yaml \
 		--set env.PBB_AWS_REGION=${PBB_AWS_REGION} \
 		--set env.PBB_USERNAME=${PBB_USERNAME} \
 		--set env.PBB_AWS_BUCKET_NAME=${PBB_AWS_BUCKET_NAME} \
@@ -96,7 +96,7 @@ lambda-init:
 		--zip-file fileb://function.zip \
 		--timeout 300 \
 		--memory-size 128
-			
+
 .PHONY: lambda-push
 lambda-push:
 	@echo Pushing to AWS Lambda.

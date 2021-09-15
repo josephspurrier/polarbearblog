@@ -1,5 +1,5 @@
 # Run this workflow every time a new commit or PR pushed to the repository.
-on: [push, pull_request]
+on: [pull_request]
 # Name of the workflow. If this is blank, it will default to the path of the
 # file.
 name: Unit Tests
