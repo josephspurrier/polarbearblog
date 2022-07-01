@@ -17,40 +17,40 @@ You can see an active website using this stack [here](https://www.josephspurrier
 ```bash
 # App Configuration
 ## Session key to encrypt the cookie store. Generate with: make privatekey
-PBB_SESSION_KEY=
+export PBB_SESSION_KEY=
 ## Password hash that is base64 encoded. Generate with: make passhash passwordhere
-PBB_PASSWORD_HASH=
+export PBB_PASSWORD_HASH=
 ## Username to use to login to the platform at: https://example.run.app/login/admin
-PBB_USERNAME=admin
+export PBB_USERNAME=admin
 ## Enable use of HTML in markdown editors.
-PBB_ALLOW_HTML=false
+export PBB_ALLOW_HTML=false
 ## GCP bucket name (this can be one that doesn't exist yet).
-PBB_GCP_BUCKET_NAME=sample-bucket
+export PBB_GCP_BUCKET_NAME=sample-bucket
 ## Optional: enable MFA (TOTP) that works with apps like Google Authenticator. Generate with: make mfa
-# PBB_MFA_KEY=
+# export PBB_MFA_KEY=
 ## Optional: set the time zone from here:
 ## https://golang.org/src/time/zoneinfo_abbrs_windows.go
-# PBB_TIMEZONE=America/New_York
+# export PBB_TIMEZONE=America/New_York
 
 # GCP Deployment
 ## GCP project ID.
-PBB_GCP_PROJECT_ID=my-sample-project-191923
+export PBB_GCP_PROJECT_ID=my-sample-project-191923
 ## Name of the docker image that will be created and stored in GCP Repository.
-PBB_GCP_IMAGE_NAME=sample-image
+export PBB_GCP_IMAGE_NAME=sample-image
 ## Name of the Cloud Run service to create.
-PBB_GCP_CLOUDRUN_NAME=sample-service
+export PBB_GCP_CLOUDRUN_NAME=sample-service
 ## Region (not zone) where the Cloud Run service will be created:
 ## https://cloud.google.com/compute/docs/regions-zones#available
-PBB_GCP_REGION=us-central1
+export PBB_GCP_REGION=us-central1
 
 # MFA Configuration
 ## Friendly identifier when you generate the MFA string.
-PBB_ISSUER=www.example.com
+export PBB_ISSUER=www.example.com
 
 # Local Development
 ## Set this to any value to allow you to do testing locally without GCP access.
 ## See 'Local Development Flag' section below for more information.
-PBB_LOCAL=true
+export PBB_LOCAL=true
 ```
 
 - To generate the `PBB_SESSION_KEY` variable for .env, run: `make privatekey`. Overwrite the line in the `.env` file.
