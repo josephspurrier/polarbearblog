@@ -11,6 +11,7 @@
 
 # Load the environment variables.
 include .env
+export
 
 .PHONY: default
 default: gcp-push
