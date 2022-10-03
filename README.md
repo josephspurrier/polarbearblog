@@ -11,7 +11,7 @@ You can see an active website using this stack [here](https://www.josephspurrier
 
 ## Quickstart on Local
 
-- Clone the repository: `git@github.com:josephspurrier/polarbearblog.git`
+- Clone the repository: `git clone git@github.com:josephspurrier/polarbearblog.git`
 - Create a new file called `.env` in the root of the repository with this content:
 
 ```bash
