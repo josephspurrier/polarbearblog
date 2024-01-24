@@ -55,6 +55,20 @@
         {{if and .pubdate DisqusID}}
         <div id="disqus_thread"></div>
         {{end}}
+        {{if and .pubdate CactusSiteName}}
+        <script type="text/javascript" src="https://latest.cactus.chat/cactus.js"></script>
+        <link rel="stylesheet" href="https://latest.cactus.chat/style.css" type="text/css">
+        <div id="comment-section"></div>
+        <script>
+        initComments({
+          node: document.getElementById("comment-section"),
+          defaultHomeserverUrl: "https://matrix.cactus.chat:8448",
+          serverName: "cactus.chat",
+          siteName: "{{CactusSiteName}}",
+          commentSectionId: "{{.posturl}}"
+        })
+        </script>
+        {{end}}
     </main>
     <footer>
         {{SiteFooter}}

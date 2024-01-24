@@ -19,6 +19,7 @@ type Site struct {
 	LoginURL          string          `json:"loginurl"`
 	GoogleAnalyticsID string          `json:"googleanalytics"`
 	DisqusID          string          `json:"disqus"`
+	CactusSiteName    string          `json:"cactus"`
 	Created           time.Time       `json:"created"`
 	Updated           time.Time       `json:"updated"`
 	Content           string          `json:"content"` // Home content.
