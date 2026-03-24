@@ -15,24 +15,22 @@ jobs:
       fail-fast: false
     runs-on: ${{ matrix.os }}
     steps:
-    # Install Go.
-    - name: Install Go
-      uses: actions/setup-go@v2
-      with:
-        go-version: ${{ matrix.go-version }}
-    # Checkout the code.
-    - name: Checkout code
-      uses: actions/checkout@v2
-    # Run all the unit tests.
-    - name: Run all unit tests
-      run: go test -race -covermode atomic -coverprofile=covprofile ./...
-    # Install goveralls.
-    - name: Install goveralls
-      env:
-        GO111MODULE: off
-      run: go get github.com/mattn/goveralls
-    # Send coverage to https://coveralls.io/.
-    - name: Send coverage
-      env:
-        COVERALLS_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      run: goveralls -coverprofile=covprofile -service=github
+      # Checkout the code.
+      - name: Checkout code
+        uses: actions/checkout@v6
+      # Install Go.
+      - name: Install Go
+        uses: actions/setup-go@v6
+        with:
+          go-version: ${{ matrix.go-version }}
+      # Run all the unit tests.
+      - name: Run all unit tests
+        run: go test -race -covermode atomic -coverprofile=covprofile ./...
+      # Install goveralls.
+      - name: Install goveralls
+        run: go install github.com/mattn/goveralls@latest
+      # Send coverage to https://coveralls.io/.
+      - name: Send coverage
+        env:
+          COVERALLS_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: goveralls -coverprofile=covprofile -service=github
