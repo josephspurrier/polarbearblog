@@ -8,6 +8,7 @@
 # * make passhash passwordhere
 # * make local-init
 # * make local-run
+# * make docker-build
 
 # Load the environment variables.
 include .env
@@ -79,3 +80,8 @@ local-init:
 local-run:
 	@echo Starting local server.
 	LOCALDEV=true go run main.go
+
+.PHONY: docker-build
+docker-build:
+	@echo Building Docker image.
+	docker build -t polarbearblog .
