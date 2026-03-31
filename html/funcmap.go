@@ -60,6 +60,12 @@ func FuncMap(r *http.Request, storage *datastorage.Storage,
 		}
 		return storage.Site.DisqusID
 	}
+	fm["CactusSiteName"] = func() string {
+		if envdetect.RunningLocalDev() {
+			return ""
+		}
+		return storage.Site.CactusSiteName
+	}
 	fm["SiteFooter"] = func() string {
 		return storage.Site.Footer
 	}
