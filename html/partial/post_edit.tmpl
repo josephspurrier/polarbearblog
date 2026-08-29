@@ -40,6 +40,16 @@
         </span>
     </p>
     <p>
+        <label for="id_description">Description (optional):</label>
+        <textarea name="description" cols="40" rows="2" id="id_description">{{.description}}</textarea>
+        <span class="helptext">Used for search results and link previews. Defaults to the opening of the content.</span>
+    </p>
+    <p>
+        <label for="id_image">Preview image (optional):</label>
+        <input type="text" name="image" id="id_image" value="{{.image}}">
+        <span class="helptext">Shown when the post is shared. Defaults to the first image in the content.</span>
+    </p>
+    <p>
         <label for="id_tags">Tags:</label>
         <input type="text" name="tags" id="id_tags" value="{{.tags}}">
         <span class="helptext">A comma-separated list of tags.</span>

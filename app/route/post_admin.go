@@ -71,6 +71,8 @@ func (c *AdminPost) store(w http.ResponseWriter, r *http.Request) (status int, e
 	}
 	p.Timestamp = ts
 	p.Content = r.FormValue("content")
+	p.Description = r.FormValue("description")
+	p.Image = r.FormValue("image")
 	p.Tags = p.Tags.Split(r.FormValue("tags"))
 	p.Page = r.FormValue("is_page") == "on"
 	p.Published = r.FormValue("publish") == "on"
@@ -105,6 +107,8 @@ func (c *AdminPost) edit(w http.ResponseWriter, r *http.Request) (status int, er
 	vars["canonical"] = p.Canonical
 	vars["timestamp"] = p.Timestamp
 	vars["body"] = p.Content
+	vars["description"] = p.Description
+	vars["image"] = p.Image
 	vars["tags"] = p.Tags.String()
 	vars["page"] = p.Page
 	vars["published"] = p.Published
@@ -143,6 +147,8 @@ func (c *AdminPost) update(w http.ResponseWriter, r *http.Request) (status int, 
 	}
 	p.Timestamp = ts
 	p.Content = r.FormValue("content")
+	p.Description = r.FormValue("description")
+	p.Image = r.FormValue("image")
 	p.Tags = p.Tags.Split(r.FormValue("tags"))
 	p.Page = r.FormValue("is_page") == "on"
 	p.Published = r.FormValue("publish") == "on"

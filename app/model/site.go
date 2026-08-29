@@ -3,6 +3,7 @@ package model
 import (
 	"fmt"
 	"sort"
+	"strings"
 	"time"
 )
 
@@ -32,6 +33,22 @@ type Site struct {
 // SiteURL -
 func (s Site) SiteURL() string {
 	return fmt.Sprintf("%v://%v", s.Scheme, s.URL)
+}
+
+// AbsoluteURL returns u as an absolute URL built from the site scheme and
+// domain. A URL that is already absolute is returned unchanged and an empty
+// string returns an empty string.
+func (s Site) AbsoluteURL(u string) string {
+	if len(u) == 0 {
+		return ""
+	}
+
+	if strings.HasPrefix(u, "http://") || strings.HasPrefix(u, "https://") ||
+		strings.HasPrefix(u, "//") {
+		return u
+	}
+
+	return fmt.Sprintf("%v/%v", s.SiteURL(), strings.TrimPrefix(u, "/"))
 }
 
 // SiteTitle -

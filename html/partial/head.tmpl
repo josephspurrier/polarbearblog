@@ -10,6 +10,20 @@
     <meta name="author" content="{{SiteAuthor}}">
     <meta name="description" content="{{if .metadescription}}{{.metadescription}}{{else}}{{SiteDescription}}{{end}}">
     {{if .canonical}}<link rel="canonical" href="{{.canonical}}" />{{end}}
+    <meta property="og:site_name" content="{{SiteTitle}}">
+    <meta property="og:type" content="{{if .pubdate}}article{{else}}website{{end}}">
+    <meta property="og:title" content="{{if .title}}{{.title}}{{else}}{{SiteTitle}}{{end}}">
+    <meta property="og:description" content="{{if .metadescription}}{{.metadescription}}{{else}}{{SiteDescription}}{{end}}">
+    {{if .pageurl}}<meta property="og:url" content="{{.pageurl}}">{{end}}
+    {{if .pageimage}}
+    <meta property="og:image" content="{{.pageimage}}">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:image" content="{{.pageimage}}">
+    {{else}}
+    <meta name="twitter:card" content="summary">
+    {{end}}
+    <meta name="twitter:title" content="{{if .title}}{{.title}}{{else}}{{SiteTitle}}{{end}}">
+    <meta name="twitter:description" content="{{if .metadescription}}{{.metadescription}}{{else}}{{SiteDescription}}{{end}}">
     <!--[if IE]>
     <script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
     <![endif]-->

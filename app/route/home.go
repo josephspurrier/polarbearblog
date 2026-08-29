@@ -4,6 +4,7 @@ import (
 	"net/http"
 	"time"
 
+	"github.com/josephspurrier/polarbearblog/app/lib/htmltemplate"
 	"github.com/josephspurrier/polarbearblog/app/model"
 )
 
@@ -30,6 +31,10 @@ func (c *HomePost) show(w http.ResponseWriter, r *http.Request) (status int, err
 	}
 
 	vars := make(map[string]interface{})
+	vars["pageurl"] = c.Storage.Site.SiteURL()
+	vars["pageimage"] = c.Storage.Site.AbsoluteURL(
+		htmltemplate.FirstImageURL(p.Content))
+
 	return c.Render.Post(w, r, "base", p, vars)
 }
 

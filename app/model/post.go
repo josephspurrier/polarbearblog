@@ -45,16 +45,18 @@ func (t PostList) Less(i, j int) bool {
 
 // Post -
 type Post struct {
-	Title     string    `json:"title"`
-	URL       string    `json:"url"`
-	Canonical string    `json:"canonical"`
-	Created   time.Time `json:"created"`
-	Updated   time.Time `json:"updated"`
-	Timestamp time.Time `json:"timestamp"`
-	Content   string    `json:"content"`
-	Published bool      `json:"published"`
-	Page      bool      `json:"page"`
-	Tags      TagList   `json:"tags"`
+	Title       string    `json:"title"`
+	URL         string    `json:"url"`
+	Canonical   string    `json:"canonical"`
+	Created     time.Time `json:"created"`
+	Updated     time.Time `json:"updated"`
+	Timestamp   time.Time `json:"timestamp"`
+	Content     string    `json:"content"`
+	Description string    `json:"description"`
+	Image       string    `json:"image"`
+	Published   bool      `json:"published"`
+	Page        bool      `json:"page"`
+	Tags        TagList   `json:"tags"`
 }
 
 // PostWithID -

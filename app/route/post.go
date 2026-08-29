@@ -78,7 +78,22 @@ func (c *Post) show(w http.ResponseWriter, r *http.Request) (status int, err err
 	vars["canonical"] = p.Canonical
 	vars["id"] = p.ID
 	vars["posturl"] = p.URL
-	vars["metadescription"] = htmltemplate.PlaintextBlurb(p.Content)
+	// Use the post description for search results and link previews and fall
+	// back to a blurb built from the content when it is empty.
+	description := p.Description
+	if len(description) == 0 {
+		description = htmltemplate.PlaintextBlurb(p.Content)
+	}
+	vars["metadescription"] = description
+	vars["pageurl"] = c.Storage.Site.AbsoluteURL(p.URL)
+
+	// Use the post image for link previews and fall back to the first image
+	// in the content so posts written before the field existed still preview.
+	image := p.Image
+	if len(image) == 0 {
+		image = htmltemplate.FirstImageURL(p.Content)
+	}
+	vars["pageimage"] = c.Storage.Site.AbsoluteURL(image)
 
 	return c.Render.Post(w, r, "base", p.Post, vars)
 }
