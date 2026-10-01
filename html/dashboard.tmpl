@@ -51,6 +51,17 @@
             }
         });
 
+        // Work around stackedit.js 1.0.7 closing the editor on any message
+        // without a type: https://github.com/benweet/stackedit.js/issues/45
+        const originalHandler = stackedit.$messageHandler;
+        window.removeEventListener('message', originalHandler);
+        stackedit.$messageHandler = (event) => {
+            if (event.data && event.data.type) {
+                originalHandler(event);
+            }
+        };
+        window.addEventListener('message', stackedit.$messageHandler);
+
         // Listen to StackEdit events and apply the changes to the textarea.
         stackedit.on('fileChange', (file) => {
             el.value = file.content.text;
